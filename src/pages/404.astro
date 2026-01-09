@@ -3,12 +3,55 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import { t, getLocalizedPath } from '@/i18n/utils';
 
 const locale = 'fr'; // Default to French for 404
+
+// Suggested pages
+const suggestions = [
+  {
+    name: t(locale, 'nav.home'),
+    href: getLocalizedPath(locale),
+    icon: 'home',
+    description: 'Retour à la page d\'accueil'
+  },
+  {
+    name: t(locale, 'nav.projects'),
+    href: getLocalizedPath(locale, 'projects'),
+    icon: 'folder',
+    description: 'Découvrez mes projets'
+  },
+  {
+    name: t(locale, 'nav.skills'),
+    href: getLocalizedPath(locale, 'skills'),
+    icon: 'code',
+    description: 'Mes compétences techniques'
+  },
+  {
+    name: t(locale, 'nav.about'),
+    href: getLocalizedPath(locale, 'about'),
+    icon: 'user',
+    description: 'À propos de moi'
+  },
+  {
+    name: t(locale, 'nav.contact'),
+    href: getLocalizedPath(locale, 'contact'),
+    icon: 'mail',
+    description: 'Me contacter'
+  },
+];
+
+const icons = {
+  home: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
+  folder: 'M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z',
+  code: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4',
+  user: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
+  mail: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
+};
 ---
 
 <BaseLayout title={t(locale, '404.title')} locale={locale}>
   <section class="py-16 md:py-24">
     <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="mx-auto max-w-2xl text-center space-y-8 animate-fade-in-up">
+      <div class="mx-auto max-w-3xl text-center space-y-12 animate-fade-in-up">
+        <!-- Error Message -->
         <div class="space-y-4">
           <h1 class="font-heading text-9xl font-bold text-primary">404</h1>
           <h2 class="font-heading text-3xl font-semibold">
@@ -19,8 +62,47 @@ const locale = 'fr'; // Default to French for 404
           </p>
         </div>
 
+        <!-- Suggestions -->
+        <div class="space-y-6">
+          <h3 class="font-heading text-xl font-semibold text-foreground">
+            Vous cherchiez peut-être...
+          </h3>
+
+          <div class="grid gap-4 sm:grid-cols-2 text-left">
+            {suggestions.map((page) => (
+              <a
+                href={page.href}
+                class="group card p-4 hover:border-primary/50 hover:shadow-lg transition-all duration-300"
+              >
+                <div class="flex items-start gap-3">
+                  <div class="rounded-lg bg-primary/10 p-2 group-hover:bg-primary/20 transition-colors">
+                    <svg class="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d={icons[page.icon as keyof typeof icons]} />
+                    </svg>
+                  </div>
+                  <div class="flex-1">
+                    <h4 class="font-semibold text-foreground group-hover:text-primary transition-colors">
+                      {page.name}
+                    </h4>
+                    <p class="text-sm text-muted-foreground mt-1">
+                      {page.description}
+                    </p>
+                  </div>
+                  <svg class="w-4 h-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        <!-- Back Home Button -->
         <div>
-          <a href={getLocalizedPath(locale)} class="btn btn-primary px-8 py-3">
+          <a href={getLocalizedPath(locale)} class="btn btn-primary px-8 py-3 inline-flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
             {t(locale, '404.back_home')}
           </a>
         </div>

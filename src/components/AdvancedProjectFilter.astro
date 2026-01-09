@@ -1,0 +1,333 @@
+---
+import { type Locale, t } from '@/i18n/utils';
+
+interface Props {
+  tags: string[];
+  locale: Locale;
+  projectCount: number;
+}
+
+const { tags, locale, projectCount } = Astro.props;
+
+// Get unique tags
+const uniqueTags = [...new Set(tags)].sort();
+
+// Sort options
+const sortOptions = [
+  { value: 'date-desc', label: locale === 'fr' ? 'Plus récent' : 'Newest' },
+  { value: 'date-asc', label: locale === 'fr' ? 'Plus ancien' : 'Oldest' },
+  { value: 'alpha-asc', label: locale === 'fr' ? 'A → Z' : 'A → Z' },
+  { value: 'alpha-desc', label: locale === 'fr' ? 'Z → A' : 'Z → A' },
+  { value: 'featured', label: locale === 'fr' ? 'Mis en avant' : 'Featured' },
+];
+---
+
+<div class="advanced-filter-container space-y-4">
+  <!-- Search and Controls Row -->
+  <div class="flex flex-col sm:flex-row gap-4">
+    <!-- Search Input -->
+    <div class="flex-1">
+      <div class="relative">
+        <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <input
+          type="text"
+          id="project-search"
+          placeholder={locale === 'fr' ? 'Rechercher des projets...' : 'Search projects...'}
+          class="w-full pl-10 pr-4 py-2.5 rounded-lg text-sm transition-all duration-200
+                 border border-border bg-card hover:border-primary/50 focus:border-primary
+                 focus:outline-none focus:ring-2 focus:ring-primary/20"
+        />
+      </div>
+    </div>
+
+    <!-- Sort Dropdown -->
+    <div class="relative">
+      <button
+        id="sort-dropdown-btn"
+        class="sort-dropdown-button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12" />
+        </svg>
+        <span id="sort-current-text">{locale === 'fr' ? 'Plus récent' : 'Newest'}</span>
+        <svg class="w-4 h-4 transition-transform" id="sort-dropdown-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </button>
+
+      <div
+        id="sort-dropdown-menu"
+        class="sort-dropdown-menu"
+        role="menu"
+      >
+        {sortOptions.map((option) => (
+          <button
+            class={`sort-option ${option.value === 'date-desc' ? 'active' : ''}`}
+            data-sort={option.value}
+            role="menuitem"
+          >
+            {option.label}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <!-- Tag Filter Dropdown -->
+    <div class="relative">
+      <button
+        id="filter-dropdown-btn"
+        class="filter-dropdown-button"
+        aria-haspopup="true"
+        aria-expanded="false"
+      >
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+        </svg>
+        <span id="filter-current-text">{t(locale, 'projects.filter_all')}</span>
+        <svg class="w-4 h-4 transition-transform" id="filter-dropdown-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+        </svg>
+      </button>
+
+      <div
+        id="filter-dropdown-menu"
+        class="filter-dropdown-menu"
+        role="menu"
+      >
+        <div class="filter-dropdown-content">
+          <button
+            class="filter-option active"
+            data-filter="all"
+            role="menuitem"
+          >
+            {t(locale, 'projects.filter_all')}
+          </button>
+          {uniqueTags.map((tag) => (
+            <button
+              class="filter-option"
+              data-filter={tag}
+              role="menuitem"
+            >
+              <span class="badge badge-sm">{tag}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Results Count -->
+  <div class="flex items-center gap-2 text-sm text-muted-foreground">
+    <span id="results-count">{projectCount}</span>
+    <span>{locale === 'fr' ? 'projet(s)' : 'project(s)'}</span>
+  </div>
+</div>
+
+<style>
+  .sort-dropdown-button,
+  .filter-dropdown-button {
+    @apply px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-200;
+    @apply border border-border bg-card hover:border-primary/50 hover:bg-primary/5;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary/20;
+    @apply flex items-center gap-2 whitespace-nowrap;
+  }
+
+  .sort-dropdown-menu,
+  .filter-dropdown-menu {
+    @apply absolute right-0 mt-2 w-48 rounded-lg shadow-xl opacity-0 invisible;
+    @apply bg-card border border-border;
+    @apply transition-all duration-200 ease-out;
+    @apply z-50;
+    transform: translateY(-10px);
+  }
+
+  .sort-dropdown-menu.open,
+  .filter-dropdown-menu.open {
+    @apply opacity-100 visible;
+    transform: translateY(0);
+  }
+
+  .filter-dropdown-content {
+    @apply p-2 space-y-1 max-h-80 overflow-y-auto;
+  }
+
+  .sort-option,
+  .filter-option {
+    @apply w-full text-left px-3 py-2 rounded-md text-sm transition-colors;
+    @apply hover:bg-muted focus:outline-none focus:bg-muted;
+  }
+
+  .sort-option.active,
+  .filter-option.active {
+    @apply bg-primary/10 text-primary font-medium;
+  }
+
+  /* Scrollbar */
+  .filter-dropdown-content::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .filter-dropdown-content::-webkit-scrollbar-track {
+    @apply bg-muted/30 rounded-full;
+  }
+
+  .filter-dropdown-content::-webkit-scrollbar-thumb {
+    @apply bg-muted rounded-full hover:bg-muted-foreground/30;
+  }
+</style>
+
+<script>
+  interface ProjectCard extends HTMLElement {
+    dataset: {
+      tags?: string;
+      title?: string;
+      date?: string;
+      featured?: string;
+    };
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    // Elements
+    const searchInput = document.getElementById('project-search') as HTMLInputElement;
+    const sortBtn = document.getElementById('sort-dropdown-btn');
+    const sortMenu = document.getElementById('sort-dropdown-menu');
+    const sortIcon = document.getElementById('sort-dropdown-icon');
+    const sortText = document.getElementById('sort-current-text');
+    const sortOptions = document.querySelectorAll('.sort-option');
+
+    const filterBtn = document.getElementById('filter-dropdown-btn');
+    const filterMenu = document.getElementById('filter-dropdown-menu');
+    const filterIcon = document.getElementById('filter-dropdown-icon');
+    const filterText = document.getElementById('filter-current-text');
+    const filterOptions = document.querySelectorAll('.filter-option');
+
+    const resultsCount = document.getElementById('results-count');
+    const projectCards = document.querySelectorAll('[data-project-card]') as NodeListOf<ProjectCard>;
+
+    let currentSort = 'date-desc';
+    let currentFilter = 'all';
+    let currentSearch = '';
+
+    // Toggle dropdowns
+    function toggleDropdown(btn: HTMLElement | null, menu: HTMLElement | null, icon: HTMLElement | null) {
+      if (!btn || !menu || !icon) return;
+
+      const isOpen = menu.classList.contains('open');
+      // Close all dropdowns first
+      document.querySelectorAll('.sort-dropdown-menu, .filter-dropdown-menu').forEach(m => m.classList.remove('open'));
+      document.querySelectorAll('#sort-dropdown-icon, #filter-dropdown-icon').forEach(i => (i as HTMLElement).style.transform = 'rotate(0deg)');
+
+      if (!isOpen) {
+        menu.classList.add('open');
+        icon.style.transform = 'rotate(180deg)';
+        btn.setAttribute('aria-expanded', 'true');
+      } else {
+        btn.setAttribute('aria-expanded', 'false');
+      }
+    }
+
+    sortBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleDropdown(sortBtn, sortMenu, sortIcon);
+    });
+
+    filterBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleDropdown(filterBtn, filterMenu, filterIcon);
+    });
+
+    // Close dropdowns on outside click
+    document.addEventListener('click', () => {
+      sortMenu?.classList.remove('open');
+      filterMenu?.classList.remove('open');
+      if (sortIcon) sortIcon.style.transform = 'rotate(0deg)';
+      if (filterIcon) filterIcon.style.transform = 'rotate(0deg)';
+    });
+
+    // Search functionality
+    searchInput?.addEventListener('input', (e) => {
+      currentSearch = (e.target as HTMLInputElement).value.toLowerCase();
+      applyFilters();
+    });
+
+    // Sort functionality
+    sortOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        currentSort = option.getAttribute('data-sort') || 'date-desc';
+        sortOptions.forEach(opt => opt.classList.remove('active'));
+        option.classList.add('active');
+        if (sortText) sortText.textContent = option.textContent?.trim() || '';
+        sortMenu?.classList.remove('open');
+        if (sortIcon) sortIcon.style.transform = 'rotate(0deg)';
+        applyFilters();
+      });
+    });
+
+    // Filter functionality
+    filterOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        currentFilter = option.getAttribute('data-filter') || 'all';
+        filterOptions.forEach(opt => opt.classList.remove('active'));
+        option.classList.add('active');
+        if (filterText) filterText.textContent = option.textContent?.trim() || '';
+        filterMenu?.classList.remove('open');
+        if (filterIcon) filterIcon.style.transform = 'rotate(0deg)';
+        applyFilters();
+      });
+    });
+
+    // Apply all filters and sorting
+    function applyFilters() {
+      const cardsArray = Array.from(projectCards);
+      let visibleCount = 0;
+
+      // Filter and show/hide
+      cardsArray.forEach(card => {
+        const title = card.dataset.title?.toLowerCase() || '';
+        const tags = card.dataset.tags?.toLowerCase() || '';
+
+        const matchesSearch = !currentSearch || title.includes(currentSearch) || tags.includes(currentSearch);
+        const matchesFilter = currentFilter === 'all' || tags.includes(currentFilter.toLowerCase());
+
+        if (matchesSearch && matchesFilter) {
+          card.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      // Sort visible cards
+      const visibleCards = cardsArray.filter(card => !card.classList.contains('hidden'));
+      visibleCards.sort((a, b) => {
+        switch (currentSort) {
+          case 'date-desc':
+            return (b.dataset.date || '').localeCompare(a.dataset.date || '');
+          case 'date-asc':
+            return (a.dataset.date || '').localeCompare(b.dataset.date || '');
+          case 'alpha-asc':
+            return (a.dataset.title || '').localeCompare(b.dataset.title || '');
+          case 'alpha-desc':
+            return (b.dataset.title || '').localeCompare(a.dataset.title || '');
+          case 'featured':
+            return (b.dataset.featured === 'true' ? 1 : 0) - (a.dataset.featured === 'true' ? 1 : 0);
+          default:
+            return 0;
+        }
+      });
+
+      // Reorder DOM
+      const parent = projectCards[0]?.parentElement;
+      if (parent) {
+        visibleCards.forEach(card => parent.appendChild(card));
+      }
+
+      // Update count
+      if (resultsCount) resultsCount.textContent = visibleCount.toString();
+    }
+  });
+</script>

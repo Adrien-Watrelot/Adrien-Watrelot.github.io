@@ -64,6 +64,9 @@ const personSchema = {
     <link rel="alternate" hreflang="en" href={enURL} />
     <link rel="alternate" hreflang="x-default" href={frURL} />
 
+    <!-- RSS Feed -->
+    <link rel="alternate" type="application/rss+xml" title="Adrien Watrelot - Portfolio Updates" href={new URL('/rss.xml', Astro.site)} />
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonicalURL} />

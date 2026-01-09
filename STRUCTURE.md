@@ -250,6 +250,26 @@ Adrien-Watrelot.github.io/
 - Preserves page context when switching
 - Shows current locale with flag/icon
 
+**AdvancedProjectFilter** (`src/components/AdvancedProjectFilter.astro`):
+- Comprehensive filtering system for projects
+- Text search across title and description
+- Multi-tag filtering with badges
+- Sort options (date ascending/descending, alphabetical, featured first)
+- Real-time results counter
+- Client-side filtering for instant updates
+
+**OptimizedImage** (`src/components/OptimizedImage.astro`):
+- Smart image wrapper supporting both imported and public images
+- Automatic WebP conversion for src/assets/ images
+- Lazy loading and modern attributes
+- See IMAGE_OPTIMIZATION.md for usage guide
+
+**WebVitals** (`src/components/WebVitals.astro`):
+- Performance monitoring component (commented by default)
+- Tracks Core Web Vitals (CLS, FID, LCP, FCP, TTFB, INP)
+- Ready to integrate with analytics services
+- See PERFORMANCE.md for activation instructions
+
 ### 7. Pages
 
 #### Home (`index.astro`)
@@ -278,10 +298,13 @@ Adrien-Watrelot.github.io/
 #### Projects Listing (`projects/index.astro`)
 - Fetches projects from content collections
 - Filters by locale
-- Sorts by date (newest first)
-- Category-based dropdown filter
-- Project count display
+- **Advanced filtering system:**
+  - Real-time text search (title + tags)
+  - Multi-tag filtering with visual badges
+  - Sort by: date (newest/oldest), alphabetical (A-Z/Z-A), featured first
+  - Live results counter
 - Grid layout with ProjectCard components
+- Client-side filtering for instant updates
 - Responsive design with hover effects
 
 #### Project Detail (`projects/[slug].astro`)
@@ -302,9 +325,28 @@ Adrien-Watrelot.github.io/
 - Responsive layout
 
 #### 404 (`404.astro`)
-- Custom not found page
-- Bilingual support
-- Back to home button
+- Enhanced not found page with intelligent suggestions
+- Grid of suggested pages (Home, Projects, Skills, About, Contact)
+- Each suggestion with icon, title, and description
+- Bilingual support (French by default)
+- Improved UX with quick navigation options
+
+## RSS Feed
+
+**Endpoint**: `/rss.xml`
+
+**Implementation**: `src/pages/rss.xml.ts` using `@astrojs/rss`
+
+**Content**:
+- All projects from both languages (FR + EN)
+- Sorted by date (newest first)
+- Includes project metadata (title, description, tags, links)
+- Custom namespaces for GitHub/demo URLs and featured status
+
+**Discovery**:
+- RSS link in `<head>` of all pages
+- Auto-discoverable by RSS readers
+- Supports future blog posts and portfolio updates
 
 ## Data Flow
 
@@ -401,11 +443,13 @@ dist/
 
 ### Functionality
 1. ✅ Contact form structure in place (ready for backend integration)
-2. ✅ Project filtering with category dropdown
+2. ✅ Advanced project filtering (search, multi-tags, sort)
 3. ✅ Featured project on homepage
-4. Add analytics (Plausible, Fathom, Google Analytics)
-5. Add blog section (optional future enhancement)
-6. Add OG image for better social media sharing
+4. ✅ Analytics ready (Plausible, commented)
+5. ✅ Performance monitoring ready (Web Vitals, commented)
+6. ✅ RSS feed for projects and updates
+7. ✅ Enhanced 404 page with suggestions
+8. ✅ OG image present (/og-image.jpg)
 
 ### CI/CD
 1. ✅ GitHub Actions workflows created (ci.yml, deploy.yml)
@@ -416,10 +460,12 @@ dist/
 ## Performance Considerations
 
 - **Static Generation**: All pages pre-rendered at build time
-- **Minimal JavaScript**: Only essential client-side scripts (theme, mobile menu)
+- **Minimal JavaScript**: Only essential client-side scripts (theme, mobile menu, filtering)
 - **Font Loading**: Google Fonts with `display=swap`
-- **Image Optimization**: (TODO: Add images and use Astro's image component)
+- **Image Optimization**: ✅ Sharp + Astro Image with hybrid approach (src/assets + public/)
 - **Code Splitting**: Astro automatically splits JavaScript per page
+- **Web Vitals Monitoring**: Ready to enable (see WebVitals.astro component)
+- **RSS Feed**: Available at `/rss.xml` for better discoverability
 
 ## Browser Compatibility
 
@@ -438,18 +484,65 @@ dist/
 - Color contrast (WCAG AA compliant)
 - Responsive design (mobile-first)
 
-## Future Enhancements
+## Implementation Status
 
+### ✅ Completed Features
+
+**Core Functionality:**
+- ✅ Sitemap generation with i18n support (`@astrojs/sitemap`)
+- ✅ Structured data (JSON-LD Person schema)
+- ✅ RSS feed for projects and updates (`/rss.xml`)
+- ✅ Advanced project filtering (search, multi-tags, sort by date/alpha/featured)
+- ✅ Enhanced 404 page with intelligent suggestions
+- ✅ Image optimization (Sharp + Astro Image with hybrid approach)
+
+**SEO & Performance:**
+- ✅ Open Graph meta tags (title, description, image)
+- ✅ Twitter Cards
+- ✅ Canonical URLs
+- ✅ Language alternates (hreflang FR/EN)
+- ✅ Robots.txt configured
+- ✅ Performance monitoring ready (Web Vitals component, commented)
+- ✅ Analytics ready (Plausible, commented)
+
+**Content & UX:**
+- ✅ Contact pages with direct links (email, LinkedIn, GitHub)
+- ✅ CV download (FR ready, EN configured)
+- ✅ Project filtering by category with advanced search
+- ✅ Featured project system
+- ✅ Bilingual support (FR/EN)
+- ✅ Dark/Light theme with persistence
+
+**CI/CD & Infrastructure:**
+- ✅ GitHub Actions workflows (ci.yml, deploy.yml)
+- ✅ Branch protection on `main` with status checks
+- ✅ Automated deployment to GitHub Pages
+- ✅ Type checking and build validation
+
+---
+
+### 📋 Future Enhancements
+
+**Content Extensions:**
 - [ ] Add blog section with content collections
-- [ ] Implement CMS integration (e.g., Astro Content Layer, Tina CMS)
-- [ ] Add Open Graph image generation for social sharing
-- [ ] Implement search functionality for projects and blog posts
-- [ ] Add RSS feed for blog
-- [ ] Set up automated testing (Playwright, Vitest)
-- [ ] Add performance monitoring (Web Vitals, Lighthouse CI)
-- [ ] Implement sitemap generation (Astro plugin)
-- [ ] Add structured data (JSON-LD) for better SEO
-- [ ] Integrate analytics (Plausible, Fathom)
-- [ ] Add email newsletter subscription
-- [ ] Implement advanced project filtering (search, tags, technologies)
-- [ ] Add testimonials/recommendations section
+- [ ] Email newsletter subscription
+- [ ] Testimonials/recommendations section
+- [ ] Portfolio case studies with detailed breakdowns
+
+**Advanced Features:**
+- [ ] CMS integration (Astro Content Layer, Tina CMS)
+- [ ] Dynamic Open Graph image generation per project
+- [ ] Full-text search with index (Pagefind, Algolia)
+- [ ] Project galleries with image lightbox
+
+**Quality & Testing:**
+- [ ] Automated testing (Playwright for E2E, Vitest for unit)
+- [ ] Lighthouse CI integration in GitHub Actions
+- [ ] Accessibility testing automation (axe-core)
+- [ ] Visual regression testing
+
+**Infrastructure & Monitoring:**
+- [ ] CDN integration for better global performance
+- [ ] Error tracking (Sentry or similar)
+- [ ] Advanced analytics dashboards
+- [ ] Performance budget enforcement

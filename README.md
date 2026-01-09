@@ -4,21 +4,40 @@ Modern portfolio website built with Astro, featuring internationalization (Frenc
 
 ## Features
 
-- **Static Site Generation**: Built with Astro for optimal performance
+### Core Functionality
+- **Static Site Generation**: Built with Astro 4.x for optimal performance
 - **Internationalization (i18n)**: Full support for French and English with language switcher
 - **Dark/Light Mode**: Theme toggle with system preference detection and localStorage persistence
+- **Content Collections**: Type-safe project management with Markdown and Zod schemas
+- **RSS Feed**: Auto-generated feed at `/rss.xml` for projects and updates
+
+### User Experience
+- **Advanced Project Filtering**: Real-time search, multi-tag filtering, and sorting options
+- **Enhanced 404 Page**: Intelligent suggestions with quick navigation to main sections
 - **Modern Design**: Clean, minimalist, recruiter-friendly aesthetic with shadcn-style tokens
 - **Responsive**: Mobile-first design with adaptive navigation
-- **Content Collections**: Type-safe project management with Markdown
 - **Animations**: Subtle entrance animations (fade-in, fade-in-up)
+
+### Performance & SEO
+- **Image Optimization**: Sharp integration with automatic WebP conversion
+- **SEO Optimized**: Structured data (JSON-LD), OpenGraph, Twitter Cards, sitemap
+- **Performance Monitoring**: Web Vitals tracking ready to enable (see PERFORMANCE.md)
+- **Analytics Ready**: Plausible Analytics configured (commented, ready to activate)
+
+### Development
 - **Typography**: Inter (body), Sora (headings), JetBrains Mono (accents)
+- **Type Safety**: Full TypeScript support with strict mode
+- **CI/CD**: GitHub Actions workflows for validation and deployment
 
 ## Tech Stack
 
 - **Framework**: Astro 4.x (Static Site Generation)
 - **Styling**: Tailwind CSS with custom design tokens
-- **Language**: TypeScript
-- **Deployment**: GitHub Pages
+- **Language**: TypeScript (strict mode)
+- **Image Processing**: Sharp for optimization
+- **RSS**: @astrojs/rss for feed generation
+- **Analytics**: web-vitals for performance monitoring
+- **Deployment**: GitHub Pages with Actions CI/CD
 - **Fonts**: Google Fonts (Inter, Sora, JetBrains Mono)
 
 ## Project Structure
