@@ -1,0 +1,96 @@
+---
+/**
+ * Web Vitals Performance Monitoring
+ *
+ * This component tracks Core Web Vitals metrics and sends them to your analytics service.
+ *
+ * Metrics tracked:
+ * - CLS (Cumulative Layout Shift): Visual stability
+ * - FID (First Input Delay): Interactivity
+ * - LCP (Largest Contentful Paint): Loading performance
+ * - FCP (First Contentful Paint): Initial render
+ * - TTFB (Time to First Byte): Server response time
+ * - INP (Interaction to Next Paint): Responsiveness
+ *
+ * Usage:
+ * 1. Uncomment the import in BaseLayout.astro
+ * 2. Add <WebVitals /> before </body>
+ * 3. Configure your analytics endpoint below
+ *
+ * Documentation: https://web.dev/articles/vitals
+ */
+---
+
+<script>
+  import { onCLS, onLCP, onFCP, onTTFB, onINP } from 'web-vitals';
+
+  // Configuration
+  const DEBUG = false; // Set to true to log metrics to console
+
+  // Send metric to analytics
+  function sendToAnalytics(metric: any) {
+    if (DEBUG) {
+      console.log('[Web Vitals]', metric.name, metric.value, metric.rating);
+    }
+
+    // Uncomment and configure when ready to send data
+    /*
+    const ANALYTICS_ENDPOINT = '/api/vitals';
+    const body = JSON.stringify({
+      name: metric.name,
+      value: metric.value,
+      rating: metric.rating,
+      delta: metric.delta,
+      id: metric.id,
+      navigationType: metric.navigationType,
+      url: window.location.href,
+      userAgent: navigator.userAgent,
+      connection: (navigator as any).connection?.effectiveType,
+    });
+
+    if (navigator.sendBeacon) {
+      navigator.sendBeacon(ANALYTICS_ENDPOINT, body);
+    } else {
+      fetch(ANALYTICS_ENDPOINT, {
+        method: 'POST',
+        body,
+        headers: { 'Content-Type': 'application/json' },
+        keepalive: true,
+      });
+    }
+    */
+  }
+
+  // Track all Web Vitals
+  onCLS(sendToAnalytics);   // Cumulative Layout Shift
+  onLCP(sendToAnalytics);   // Largest Contentful Paint
+  onFCP(sendToAnalytics);   // First Contentful Paint
+  onTTFB(sendToAnalytics);  // Time to First Byte
+  onINP(sendToAnalytics);   // Interaction to Next Paint (replaces FID)
+
+  // Log initialization in debug mode
+  if (DEBUG) {
+    console.log('[Web Vitals] Monitoring initialized');
+  }
+</script>
+
+<!--
+  ACTIVATION INSTRUCTIONS:
+
+  1. In BaseLayout.astro, import this component:
+     import WebVitals from '@/components/WebVitals.astro';
+
+  2. Add before </body>:
+     <WebVitals />
+
+  3. Configure ANALYTICS_ENDPOINT above to send data to your service
+
+  4. Optional: Enable DEBUG mode during testing
+
+  5. Integration examples:
+     - Google Analytics: https://github.com/GoogleChrome/web-vitals#send-the-results-to-google-analytics
+     - Plausible: Create custom events
+     - Custom backend: POST to your API endpoint
+
+  Note: This component has no visual output and runs client-side only.
+-->

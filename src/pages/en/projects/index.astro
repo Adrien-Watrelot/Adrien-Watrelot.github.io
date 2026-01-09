@@ -2,7 +2,7 @@
 import { getCollection } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import ProjectCard from '@/components/ProjectCard.astro';
-import ProjectFilter from '@/components/ProjectFilter.astro';
+import AdvancedProjectFilter from '@/components/AdvancedProjectFilter.astro';
 import { t, getLocalizedPath } from '@/i18n/utils';
 
 const locale = 'en';
@@ -33,16 +33,24 @@ const allTags = projects.flatMap(p => p.data.tags);
           </p>
         </div>
 
-        <!-- Filter -->
+        <!-- Advanced Filter -->
         {projects.length > 0 && (
-          <ProjectFilter tags={allTags} locale={locale} />
+          <AdvancedProjectFilter tags={allTags} locale={locale} projectCount={projects.length} />
         )}
 
         <!-- Projects Grid -->
         {projects.length > 0 ? (
           <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {projects.map((project, index) => (
-              <div class="animate-fade-in-up" style={`animation-delay: ${(index + 1) * 0.1}s;`} data-tags={project.data.tags.join(',')}>
+              <div
+                class="animate-fade-in-up"
+                style={`animation-delay: ${(index + 1) * 0.1}s;`}
+                data-project-card
+                data-tags={project.data.tags.join(',')}
+                data-title={project.data.title}
+                data-date={project.data.date.toISOString()}
+                data-featured={project.data.featured.toString()}
+              >
                 <ProjectCard
                   title={project.data.title}
                   description={project.data.description}
