@@ -1,0 +1,38 @@
+# Build outputs
+dist/
+.astro/
+
+# Dependencies
+node_modules/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.production
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# OS files
+Thumbs.db
+
+# Local documentation (not for GitHub)
+BUILD_SUCCESS.md
+COMMIT_GUIDE.md
+PROJECT_SUMMARY.md
+QUICK_START.md
+STRUCTURE.md
+.claude/

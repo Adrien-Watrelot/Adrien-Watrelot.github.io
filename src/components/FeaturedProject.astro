@@ -1,0 +1,120 @@
+---
+import { type Locale, getLocalizedPath, t } from '@/i18n/utils';
+
+interface Props {
+  title: string;
+  description: string;
+  tags: string[];
+  image?: string;
+  slug: string;
+  locale: Locale;
+}
+
+const { title, description, tags, image, slug, locale } = Astro.props;
+const projectUrl = getLocalizedPath(locale, `projects/${slug}`);
+---
+
+<div class="featured-project group">
+  <div class="featured-project-content">
+    <!-- Image Section -->
+    {image && (
+      <div class="featured-project-image">
+        <img src={image} alt={title} />
+      </div>
+    )}
+    {!image && (
+      <div class="featured-project-placeholder">
+        <svg class="w-24 h-24 text-muted-foreground/30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+        <p class="text-sm text-muted-foreground">Image à venir</p>
+      </div>
+    )}
+
+    <!-- Text Section -->
+    <div class="featured-project-text">
+      <div class="space-y-4">
+        <!-- Badge -->
+        <div class="inline-flex">
+          <span class="badge-featured">
+            ⭐ {t(locale, 'home.featured_project')}
+          </span>
+        </div>
+
+        <!-- Title -->
+        <h3 class="font-heading text-3xl font-bold tracking-tight group-hover:text-primary transition-colors">
+          {title}
+        </h3>
+
+        <!-- Description -->
+        <p class="text-muted-foreground text-lg leading-relaxed">
+          {description}
+        </p>
+
+        <!-- Tags -->
+        <div class="flex flex-wrap gap-2">
+          {tags.slice(0, 6).map((tag) => (
+            <span class="badge-tag">{tag}</span>
+          ))}
+        </div>
+
+        <!-- CTA -->
+        <div>
+          <a href={projectUrl} class="inline-flex items-center text-sm font-medium text-primary hover:underline">
+            {t(locale, 'home.view_project')}
+            <svg class="ml-1 h-4 w-4 transition-transform hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .featured-project {
+    @apply rounded-lg border bg-card text-card-foreground shadow-sm overflow-hidden;
+  }
+
+  .featured-project-content {
+    @apply grid md:grid-cols-2 gap-8 p-8;
+  }
+
+  .featured-project-image {
+    @apply rounded-lg overflow-hidden bg-muted/30;
+    aspect-ratio: 16 / 10;
+  }
+
+  .featured-project-image img {
+    @apply w-full h-full object-cover transition-transform duration-500 group-hover:scale-105;
+  }
+
+  .featured-project-placeholder {
+    @apply flex flex-col items-center justify-center rounded-lg bg-muted/30 border-2 border-dashed border-border;
+    aspect-ratio: 16 / 10;
+  }
+
+  .featured-project-text {
+    @apply flex items-center;
+  }
+
+  .badge-featured {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20;
+  }
+
+  .badge-tag {
+    @apply px-3 py-1 rounded-md text-xs font-medium bg-muted text-foreground border border-border hover:border-primary/50 transition-colors;
+  }
+
+  @media (max-width: 768px) {
+    .featured-project-content {
+      @apply grid-cols-1;
+    }
+
+    .featured-project-image,
+    .featured-project-placeholder {
+      aspect-ratio: 16 / 9;
+    }
+  }
+</style>

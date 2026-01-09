@@ -1,0 +1,357 @@
+---
+import { getCollection } from 'astro:content';
+import type { GetStaticPaths } from 'astro';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ProjectSidebar from '@/components/ProjectDetail/ProjectSidebar.astro';
+import TechStack from '@/components/ProjectDetail/TechStack.astro';
+import CodeBlock from '@/components/ProjectDetail/CodeBlock.astro';
+import { t, getLocalizedPath } from '@/i18n/utils';
+
+export const getStaticPaths = (async () => {
+  const locale = 'fr';
+  const projects = await getCollection('projects', ({ id }) => {
+    return id.startsWith(`${locale}/`);
+  });
+
+  return projects.map((project) => ({
+    params: { slug: project.slug.replace(`${locale}/`, '') },
+    props: { project },
+  }));
+}) satisfies GetStaticPaths;
+
+const locale = 'fr';
+const { project } = Astro.props;
+const { Content } = await project.render();
+
+// Get other projects for "Related Projects" section
+const allProjects = await getCollection('projects', ({ id }) => {
+  return id.startsWith(`${locale}/`);
+});
+const otherProjects = allProjects
+  .filter(p => p.slug !== project.slug)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 2);
+---
+
+<BaseLayout title={project.data.title} description={project.data.description} locale={locale}>
+  <article class="project-detail">
+    <!-- Hero Section -->
+    <div class="project-hero">
+      <div class="project-hero-overlay"></div>
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8 pb-8 relative z-10">
+        <!-- Breadcrumb -->
+        <nav class="mb-4">
+          <a
+            href={getLocalizedPath(locale, 'projects')}
+            class="breadcrumb-link"
+          >
+            ← {t(locale, 'projects.back_to_projects')}
+          </a>
+        </nav>
+
+        <div class="max-w-4xl">
+          <!-- Badges -->
+          {project.data.featured && (
+            <div class="flex items-center gap-3 mb-4">
+              <span class="badge badge-featured">
+                ⭐ {t(locale, 'home.featured_project')}
+              </span>
+            </div>
+          )}
+
+          <!-- Title & Description -->
+          <h1 class="project-title">{project.data.title}</h1>
+          <p class="project-description">{project.data.description}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="project-layout max-w-7xl mx-auto">
+        <!-- Main Column -->
+        <div class="project-main">
+          <!-- Stats Boxes (if needed, can be customized per project) -->
+          <div class="stats-grid mb-12">
+            {project.data.tags.some(tag => tag.toLowerCase().includes('typescript')) && (
+              <div class="stat-box">
+                <div class="stat-value text-blue-400">100%</div>
+                <div class="stat-label">TypeScript</div>
+              </div>
+            )}
+            {project.data.tags.some(tag => tag.toLowerCase().includes('ci') || tag.toLowerCase().includes('gitlab')) && (
+              <div class="stat-box">
+                <div class="stat-value text-green-400">CI/CD</div>
+                <div class="stat-label">Automatisé</div>
+              </div>
+            )}
+            {project.data.date && (
+              <div class="stat-box">
+                <div class="stat-value text-purple-400">{project.data.date.getFullYear()}</div>
+                <div class="stat-label">Année</div>
+              </div>
+            )}
+          </div>
+
+          <!-- Content -->
+          <div class="prose-custom">
+            <Content components={{ CodeBlock, TechStack }} />
+          </div>
+
+          <!-- Related Projects -->
+          {otherProjects.length > 0 && (
+            <div class="related-projects">
+              <h2 class="related-projects-title">
+                <svg class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+                </svg>
+                Autres projets
+              </h2>
+              <div class="related-projects-grid">
+                {otherProjects.map((p) => (
+                  <a href={getLocalizedPath(locale, `projects/${p.slug.replace(`${locale}/`, '')}`)} class="related-project-card">
+                    <h3 class="related-project-title">{p.data.title}</h3>
+                    <p class="related-project-description">{p.data.description}</p>
+                    <div class="related-project-tags">
+                      {p.data.tags.slice(0, 3).map((tag) => (
+                        <span class="related-project-tag">{tag}</span>
+                      ))}
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <!-- Sidebar (Desktop) -->
+        <div class="project-sidebar-wrapper">
+          <ProjectSidebar
+            date={project.data.date}
+            tags={project.data.tags}
+            demoUrl={project.data.demoUrl}
+            githubUrl={project.data.githubUrl}
+            locale={locale}
+          />
+        </div>
+      </div>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .project-detail {
+    min-height: 100vh;
+  }
+
+  /* Hero Section */
+  .project-hero {
+    position: relative;
+    height: 320px;
+    display: flex;
+    align-items: flex-end;
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.3) 0%, hsl(var(--primary) / 0.15) 100%);
+  }
+
+  .project-hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, hsl(var(--background)) 0%, hsl(var(--background) / 0.5) 50%, transparent 100%);
+  }
+
+  .breadcrumb-link {
+    @apply text-sm transition-colors;
+    color: var(--color-text-muted);
+  }
+
+  .breadcrumb-link:hover {
+    color: hsl(var(--primary));
+  }
+
+  .badge-featured {
+    @apply px-3 py-1 rounded-full text-xs font-medium;
+    background: hsl(var(--primary) / 0.2);
+    color: hsl(var(--primary));
+    border: 1px solid hsl(var(--primary) / 0.3);
+  }
+
+  .project-title {
+    @apply text-5xl font-bold mb-4;
+  }
+
+  .project-description {
+    @apply text-xl;
+    color: var(--color-text-muted);
+  }
+
+  /* Layout */
+  .project-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  @media (min-width: 1024px) {
+    .project-layout {
+      grid-template-columns: 1fr 320px;
+    }
+  }
+
+  .project-sidebar-wrapper {
+    display: none;
+  }
+
+  @media (min-width: 1024px) {
+    .project-sidebar-wrapper {
+      display: block;
+    }
+  }
+
+  /* Stats Grid */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1rem;
+  }
+
+  .stat-box {
+    @apply rounded-lg p-4 text-center;
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.1) 0%, hsl(var(--primary) / 0.05) 100%);
+    border: 1px solid hsl(var(--primary) / 0.3);
+  }
+
+  .stat-value {
+    @apply text-3xl font-bold;
+  }
+
+  .stat-label {
+    @apply text-sm mt-1;
+    color: var(--color-text-muted);
+  }
+
+  /* Prose Styling */
+  .prose-custom {
+    @apply max-w-none space-y-8;
+  }
+
+  .prose-custom :global(h2) {
+    @apply text-3xl font-bold mt-12 mb-4 flex items-center gap-3;
+  }
+
+  .prose-custom :global(h3) {
+    @apply text-2xl font-semibold mt-8 mb-3;
+  }
+
+  .prose-custom :global(p) {
+    @apply text-lg leading-relaxed mb-4;
+    color: var(--color-text-muted);
+  }
+
+  .prose-custom :global(ul) {
+    @apply list-none space-y-2 my-4;
+  }
+
+  .prose-custom :global(ul li) {
+    @apply relative pl-7;
+    color: var(--color-text-muted);
+  }
+
+  .prose-custom :global(ul li::before) {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: hsl(var(--primary));
+    font-weight: bold;
+  }
+
+  .prose-custom :global(strong) {
+    @apply font-semibold;
+    color: var(--color-text);
+  }
+
+  .prose-custom :global(code) {
+    @apply px-1.5 py-0.5 rounded text-sm;
+    background: var(--color-muted);
+    color: hsl(var(--primary));
+  }
+
+  .prose-custom :global(pre) {
+    @apply rounded-lg p-4 overflow-x-auto my-6;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+  }
+
+  /* Code Terminal Styling */
+  .prose-custom :global(.code-terminal) {
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .prose-custom :global(.code-line) {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .prose-custom :global(.code-folder) {
+    color: #60a5fa;
+    font-weight: 600;
+  }
+
+  .prose-custom :global(.code-comment) {
+    color: #94a3b8;
+    font-style: italic;
+  }
+
+  .prose-custom :global(.code-tree) {
+    color: #71717a;
+  }
+
+  /* Related Projects */
+  .related-projects {
+    @apply mt-16 pt-8;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .related-projects-title {
+    @apply text-2xl font-bold mb-6 flex items-center gap-2;
+  }
+
+  .related-projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+
+  .related-project-card {
+    @apply rounded-lg p-6 transition-all duration-300;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+  }
+
+  .related-project-card:hover {
+    transform: translateY(-4px);
+    border-color: hsl(var(--primary));
+    box-shadow: 0 10px 30px hsl(var(--primary) / 0.2);
+  }
+
+  .related-project-title {
+    @apply text-lg font-semibold mb-2;
+  }
+
+  .related-project-description {
+    @apply text-sm mb-4;
+    color: var(--color-text-muted);
+  }
+
+  .related-project-tags {
+    @apply flex flex-wrap gap-2;
+  }
+
+  .related-project-tag {
+    @apply px-2 py-1 rounded text-xs;
+    background: var(--color-muted);
+    color: var(--color-text);
+  }
+</style>

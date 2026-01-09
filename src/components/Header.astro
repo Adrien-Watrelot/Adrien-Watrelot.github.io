@@ -1,0 +1,136 @@
+---
+import { t, type Locale, getLocalizedPath } from '@/i18n/utils';
+import ThemeToggle from './ThemeToggle.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+
+interface Props {
+  locale: Locale;
+  currentPath: string;
+}
+
+const { locale, currentPath } = Astro.props;
+
+const navItems = [
+  { key: 'home', path: '' },
+  { key: 'about', path: 'about' },
+  { key: 'skills', path: 'skills' },
+  { key: 'projects', path: 'projects' },
+  { key: 'contact', path: 'contact' },
+];
+---
+
+<header class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+  <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex h-16 items-center justify-between">
+      <!-- Logo -->
+      <a href={getLocalizedPath(locale)} class="flex items-center space-x-2">
+        <span class="font-heading text-xl font-bold">AW</span>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <nav class="hidden md:flex md:items-center md:space-x-6">
+        {navItems.map((item) => {
+          const href = getLocalizedPath(locale, item.path);
+          const isActive = currentPath === href || (item.path === '' && currentPath === `/${locale}/`);
+          return (
+            <a
+              href={href}
+              class:list={[
+                'text-sm font-medium transition-colors hover:text-primary',
+                isActive ? 'text-primary' : 'text-muted-foreground'
+              ]}
+            >
+              {t(locale, `nav.${item.key}`)}
+            </a>
+          );
+        })}
+      </nav>
+
+      <!-- Actions -->
+      <div class="flex items-center space-x-2">
+        <LanguageSwitcher currentLocale={locale} currentPath={currentPath} />
+        <ThemeToggle locale={locale} />
+
+        <!-- Mobile menu button -->
+        <button
+          id="mobile-menu-button"
+          type="button"
+          class="md:hidden inline-flex items-center justify-center rounded-md p-2 text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          aria-label="Toggle menu"
+        >
+          <svg
+            class="menu-icon h-6 w-6"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+          <svg
+            class="close-icon hidden h-6 w-6"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Navigation -->
+  <div id="mobile-menu" class="hidden md:hidden border-t">
+    <nav class="container mx-auto px-4 py-4 space-y-2">
+      {navItems.map((item) => {
+        const href = getLocalizedPath(locale, item.path);
+        const isActive = currentPath === href || (item.path === '' && currentPath === `/${locale}/`);
+        return (
+          <a
+            href={href}
+            class:list={[
+              'block px-3 py-2 rounded-md text-base font-medium transition-colors hover:bg-accent',
+              isActive ? 'text-primary bg-accent' : 'text-foreground'
+            ]}
+          >
+            {t(locale, `nav.${item.key}`)}
+          </a>
+        );
+      })}
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Mobile menu toggle
+  const menuButton = document.getElementById('mobile-menu-button');
+  const mobileMenu = document.getElementById('mobile-menu');
+  const menuIcon = menuButton?.querySelector('.menu-icon');
+  const closeIcon = menuButton?.querySelector('.close-icon');
+
+  menuButton?.addEventListener('click', () => {
+    const isOpen = !mobileMenu?.classList.contains('hidden');
+
+    if (isOpen) {
+      mobileMenu?.classList.add('hidden');
+      menuIcon?.classList.remove('hidden');
+      closeIcon?.classList.add('hidden');
+    } else {
+      mobileMenu?.classList.remove('hidden');
+      menuIcon?.classList.add('hidden');
+      closeIcon?.classList.remove('hidden');
+    }
+  });
+
+  // Close mobile menu when clicking outside
+  document.addEventListener('click', (event) => {
+    const target = event.target as HTMLElement;
+    if (!menuButton?.contains(target) && !mobileMenu?.contains(target)) {
+      mobileMenu?.classList.add('hidden');
+      menuIcon?.classList.remove('hidden');
+      closeIcon?.classList.add('hidden');
+    }
+  });
+</script>

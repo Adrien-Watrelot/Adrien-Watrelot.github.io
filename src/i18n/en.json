@@ -1,0 +1,116 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "skills": "Skills",
+    "projects": "Projects",
+    "contact": "Contact"
+  },
+  "home": {
+    "greeting": "Hello, I'm",
+    "name": "Adrien Watrelot",
+    "title": "Full-Stack Developer",
+    "description": "Passionate about creating modern and performant web experiences. Specialized in front-end and back-end development.",
+    "cta": "View my projects",
+    "contact_cta": "Contact me",
+    "featured_project": "Featured Project",
+    "view_project": "View project"
+  },
+  "about": {
+    "title": "About me",
+    "intro_greeting": "Hello! I'm Adrien Watrelot",
+    "intro_role": "Passionate Full-Stack Developer",
+    "intro_description": "Final-year student in application development, I am passionate about creating modern and performant web experiences. My training and professional experiences have allowed me to develop strong skills in front-end and back-end development, as well as adaptability and professional rigor.",
+    "intro_goal": "My goal is to continue developing my skills while contributing to enriching projects in a stimulating professional environment.",
+    "experience_title": "Professional Experience",
+    "exp_helmo_title": "Developer Intern",
+    "exp_helmo_company": "Haute École Libre Mosane",
+    "exp_helmo_location": "Liège, Belgium",
+    "exp_helmo_period": "February 2024 - May 2024",
+    "exp_helmo_duration": "4 months",
+    "exp_helmo_desc": "Integration into the IT department's development team to participate in the technological overhaul of the internal portal for staff and students. Applied skills acquired in training, worked using agile methodology, and actively participated in project meetings.",
+    "exp_taverne_title": "Bartender",
+    "exp_taverne_company": "La Taverne Waremme",
+    "exp_taverne_location": "Waremme, Belgium",
+    "exp_taverne_period": "March 2023 - September 2025",
+    "exp_taverne_duration": "2 years and 7 months",
+    "exp_taverne_desc": "Complete bar management, customer service, cash management, and training of new team members. Developed skills in stress management, conflict resolution, and teamwork under pressure.",
+    "exp_colona_title": "Material Handler",
+    "exp_colona_company": "Colona S.A.",
+    "exp_colona_location": "Waremme, Belgium",
+    "exp_colona_period": "July 2012 - August 2022",
+    "exp_colona_duration": "10 years and 2 months",
+    "exp_colona_desc": "Responsible for the end of the production line, coordinating with all actors to ensure product compliance before shipping or storage.",
+    "education_title": "Education",
+    "edu_bachelor_degree": "Bachelor's in Computer Science",
+    "edu_bachelor_specialization": "Application Development specialization",
+    "edu_bachelor_school": "Haute École Libre Mosane, Liège",
+    "edu_bachelor_period": "September 2019 - Present",
+    "edu_bachelor_desc": "Comprehensive software development training covering front-end and back-end technologies, databases, software architecture, and agile methodologies.",
+    "skills_highlight_title": "Key Skills",
+    "skills_highlight_desc": "Throughout my academic and professional journey, I have developed expertise in several areas of web development.",
+    "skills_highlight_link": "View all my skills",
+    "interests_title": "Interests",
+    "interest_aquarium": "Aquariums",
+    "interest_gaming": "Video games",
+    "interest_music": "Music",
+    "interest_sport": "Sports",
+    "cta_text": "Interested in my profile? Feel free to contact me!",
+    "cta_contact": "Contact me",
+    "cta_projects": "View my projects",
+    "cta_linkedin": "View my LinkedIn profile",
+    "download_cv": "Download my CV",
+    "download_cv_pdf": "PDF Format"
+  },
+  "skills": {
+    "title": "Skills",
+    "subtitle": "Technologies and tools I master",
+    "frontend": "Front-end",
+    "backend": "Back-end",
+    "database": "Databases",
+    "tools": "Tools & DevOps",
+    "soft": "Soft skills"
+  },
+  "projects": {
+    "title": "My projects",
+    "subtitle": "Discover my recent work",
+    "view_project": "View project",
+    "view_demo": "View demo",
+    "view_code": "View code",
+    "back_to_projects": "Back to projects",
+    "filter_all": "All",
+    "filter_count": "{count} project(s)",
+    "date": "Date",
+    "role": "Role",
+    "duration": "Duration",
+    "technologies": "Technologies"
+  },
+  "contact": {
+    "title": "Contact me",
+    "subtitle": "Feel free to reach out for any opportunity or collaboration",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "send": "Send",
+    "sending": "Sending...",
+    "success": "Message sent successfully!",
+    "error": "An error occurred. Please try again."
+  },
+  "footer": {
+    "rights": "All rights reserved",
+    "built_with": "Built with"
+  },
+  "404": {
+    "title": "Page not found",
+    "description": "Sorry, the page you are looking for does not exist.",
+    "back_home": "Back to home"
+  },
+  "theme": {
+    "toggle": "Toggle theme",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "lang": {
+    "switch": "Passer en français"
+  }
+}

@@ -1,0 +1,107 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import FeaturedProject from '@/components/FeaturedProject.astro';
+import { t, getLocalizedPath } from '@/i18n/utils';
+import { getCollection } from 'astro:content';
+
+const locale = 'fr';
+
+// Get featured project (MindfulSpace)
+const allProjects = await getCollection('projects', ({ id }) => {
+  return id.startsWith(`${locale}/`);
+});
+
+const featuredProject = allProjects.find(p => p.slug === `${locale}/mindfulspace`);
+---
+
+<BaseLayout title={t(locale, 'nav.home')} locale={locale}>
+  <!-- Hero Section -->
+  <section class="hero-gradient relative py-20 md:py-32">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-3xl text-center space-y-8 animate-fade-in-up">
+        <div class="space-y-4">
+          <p class="text-lg text-muted-foreground">{t(locale, 'home.greeting')}</p>
+          <h1 class="font-heading text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+            {t(locale, 'home.name')}
+          </h1>
+          <p class="font-heading text-2xl text-primary sm:text-3xl">
+            {t(locale, 'home.title')}
+          </p>
+        </div>
+
+        <p class="mx-auto max-w-2xl text-lg text-muted-foreground">
+          {t(locale, 'home.description')}
+        </p>
+
+        <div class="flex flex-col items-center justify-center gap-4 sm:flex-row">
+          <a href={getLocalizedPath(locale, 'projects')} class="btn btn-primary px-8 py-3">
+            {t(locale, 'home.cta')}
+          </a>
+          <a href={getLocalizedPath(locale, 'contact')} class="btn btn-outline px-8 py-3">
+            {t(locale, 'home.contact_cta')}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Project Section -->
+  {featuredProject && (
+    <section class="py-16 md:py-24 bg-muted/30">
+      <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-6xl">
+          <FeaturedProject
+            title={featuredProject.data.title}
+            description={featuredProject.data.description}
+            tags={featuredProject.data.tags}
+            slug={featuredProject.slug.replace(`${locale}/`, '')}
+            locale={locale}
+          />
+        </div>
+      </div>
+    </section>
+  )}
+
+  <!-- Features Section -->
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid gap-12 md:grid-cols-3">
+        <div class="text-center space-y-4 animate-fade-in-up" style="animation-delay: 0.1s;">
+          <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+            <svg class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+            </svg>
+          </div>
+          <h3 class="font-heading text-xl font-semibold">Développement moderne</h3>
+          <p class="text-sm text-muted-foreground">
+            Technologies front-end et back-end de pointe
+          </p>
+        </div>
+
+        <div class="text-center space-y-4 animate-fade-in-up" style="animation-delay: 0.2s;">
+          <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+            <svg class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+          </div>
+          <h3 class="font-heading text-xl font-semibold">Performance</h3>
+          <p class="text-sm text-muted-foreground">
+            Optimisation et bonnes pratiques
+          </p>
+        </div>
+
+        <div class="text-center space-y-4 animate-fade-in-up" style="animation-delay: 0.3s;">
+          <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10">
+            <svg class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"></path>
+            </svg>
+          </div>
+          <h3 class="font-heading text-xl font-semibold">Design soigné</h3>
+          <p class="text-sm text-muted-foreground">
+            Interfaces utilisateur intuitives et élégantes
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

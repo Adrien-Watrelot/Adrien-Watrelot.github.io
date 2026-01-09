@@ -1,0 +1,239 @@
+---
+interface Props {
+  tags: string[];
+}
+
+const { tags } = Astro.props;
+
+// Mapping des tags vers les noms de fichiers SVG
+const techLogoMap: Record<string, string> = {
+  'Next.js': 'nextdotjs',
+  'React': 'react',
+  'Vue.js': 'vuedotjs',
+  'TypeScript': 'typescript',
+  'JavaScript': 'javascript',
+  'Tailwind CSS': 'tailwindcss',
+  'NestJS': 'nestjs',
+  'Laravel': 'laravel',
+  'ASP.NET': 'dotnet',
+  'Node.js': 'nodedotjs',
+  'PHP': 'php',
+  'C#': 'csharp',
+  'PostgreSQL': 'postgresql',
+  'MySQL': 'mysql',
+  'MongoDB': 'mongodb',
+  'SQLite': 'sqlite',
+  'Docker': 'docker',
+  'Git': 'git',
+  'GitHub': 'github',
+  'GitLab': 'gitlab',
+  'Prisma': 'prisma',
+  'Vite': 'vite',
+  'npm': 'npm',
+  'pnpm': 'pnpm',
+  'Jest': 'jest',
+  'Swagger': 'swagger',
+  'Traefik': 'traefikproxy',
+  'Astro': 'astro',
+  'Bootstrap': 'bootstrap',
+  'Composer': 'composer',
+  'GitLab CI/CD': 'gitlab',
+};
+
+// Catégorisation des technologies
+const categories = {
+  frontend: ['Next.js', 'React', 'Vue.js', 'TypeScript', 'JavaScript', 'Tailwind CSS', 'HTML', 'CSS', 'Astro', 'Bootstrap', 'Vite'],
+  backend: ['NestJS', 'Laravel', 'ASP.NET', 'Node.js', 'PHP', 'C#', 'Python', 'Composer'],
+  database: ['PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'SQLite', 'Prisma'],
+  tools: ['Docker', 'Git', 'GitHub', 'GitLab', 'GitLab CI/CD', 'CI/CD', 'Webpack', 'Vite', 'npm', 'pnpm', 'Jest', 'Swagger', 'Traefik']
+};
+
+// Grouper les tags par catégorie
+const categorizedTags = {
+  frontend: tags.filter(tag => categories.frontend.some(cat => tag.toLowerCase().includes(cat.toLowerCase()))),
+  backend: tags.filter(tag => categories.backend.some(cat => tag.toLowerCase().includes(cat.toLowerCase()))),
+  database: tags.filter(tag => categories.database.some(cat => tag.toLowerCase().includes(cat.toLowerCase()))),
+  tools: tags.filter(tag => categories.tools.some(cat => tag.toLowerCase().includes(cat.toLowerCase())))
+};
+
+// Fonction pour obtenir le chemin du logo
+const getLogoPath = (tag: string): string | null => {
+  const logoName = techLogoMap[tag];
+  return logoName ? `/assets/icons/skills/${logoName}.svg` : null;
+};
+---
+
+<div class="space-y-8">
+  {/* Frontend */}
+  {categorizedTags.frontend.length > 0 && (
+    <div>
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-1 h-6 bg-blue-500 rounded-full"></div>
+        <h3 class="text-xl font-semibold text-blue-400">Frontend</h3>
+      </div>
+      <div class="flex flex-wrap gap-4">
+        {categorizedTags.frontend.map((tag) => {
+          const logoPath = getLogoPath(tag);
+          return logoPath ? (
+            <div class="tech-logo-container">
+              <div class="tech-logo">
+                <img src={logoPath} alt={tag} />
+              </div>
+              <div class="tech-tooltip">{tag}</div>
+            </div>
+          ) : (
+            <span class="px-3 py-2 rounded-lg text-sm bg-slate-700/50 text-slate-300 border border-slate-600">
+              {tag}
+            </span>
+          );
+        })}
+      </div>
+    </div>
+  )}
+
+  {/* Backend */}
+  {categorizedTags.backend.length > 0 && (
+    <div class="border-t border-border pt-8">
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-1 h-6 bg-green-500 rounded-full"></div>
+        <h3 class="text-xl font-semibold text-green-400">Backend</h3>
+      </div>
+      <div class="flex flex-wrap gap-4">
+        {categorizedTags.backend.map((tag) => {
+          const logoPath = getLogoPath(tag);
+          return logoPath ? (
+            <div class="tech-logo-container">
+              <div class="tech-logo">
+                <img src={logoPath} alt={tag} />
+              </div>
+              <div class="tech-tooltip">{tag}</div>
+            </div>
+          ) : (
+            <span class="px-3 py-2 rounded-lg text-sm bg-slate-700/50 text-slate-300 border border-slate-600">
+              {tag}
+            </span>
+          );
+        })}
+      </div>
+    </div>
+  )}
+
+  {/* Database */}
+  {categorizedTags.database.length > 0 && (
+    <div class="border-t border-border pt-8">
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-1 h-6 bg-purple-500 rounded-full"></div>
+        <h3 class="text-xl font-semibold text-purple-400">Database</h3>
+      </div>
+      <div class="flex flex-wrap gap-4">
+        {categorizedTags.database.map((tag) => {
+          const logoPath = getLogoPath(tag);
+          return logoPath ? (
+            <div class="tech-logo-container">
+              <div class="tech-logo">
+                <img src={logoPath} alt={tag} />
+              </div>
+              <div class="tech-tooltip">{tag}</div>
+            </div>
+          ) : (
+            <span class="px-3 py-2 rounded-lg text-sm bg-slate-700/50 text-slate-300 border border-slate-600">
+              {tag}
+            </span>
+          );
+        })}
+      </div>
+    </div>
+  )}
+
+  {/* Tools */}
+  {categorizedTags.tools.length > 0 && (
+    <div class="border-t border-border pt-8">
+      <div class="flex items-center gap-2 mb-4">
+        <div class="w-1 h-6 bg-orange-500 rounded-full"></div>
+        <h3 class="text-xl font-semibold text-orange-400">DevOps & Tools</h3>
+      </div>
+      <div class="flex flex-wrap gap-4">
+        {categorizedTags.tools.map((tag) => {
+          const logoPath = getLogoPath(tag);
+          return logoPath ? (
+            <div class="tech-logo-container">
+              <div class="tech-logo">
+                <img src={logoPath} alt={tag} />
+              </div>
+              <div class="tech-tooltip">{tag}</div>
+            </div>
+          ) : (
+            <span class="px-3 py-2 rounded-lg text-sm bg-slate-700/50 text-slate-300 border border-slate-600">
+              {tag}
+            </span>
+          );
+        })}
+      </div>
+    </div>
+  )}
+</div>
+
+<style>
+  .tech-logo-container {
+    position: relative;
+    display: inline-block;
+  }
+
+  .tech-logo {
+    width: 56px;
+    height: 56px;
+    background: var(--color-card);
+    border: 2px solid var(--color-border);
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .tech-logo:hover {
+    border-color: hsl(var(--primary));
+    background: hsl(var(--primary) / 0.1);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px hsl(var(--primary) / 0.3);
+  }
+
+  .tech-logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .tech-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-8px);
+    background: var(--color-background);
+    border: 1px solid hsl(var(--primary));
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease;
+    z-index: 10;
+  }
+
+  .tech-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: hsl(var(--primary));
+  }
+
+  .tech-logo-container:hover .tech-tooltip {
+    opacity: 1;
+  }
+</style>

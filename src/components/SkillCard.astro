@@ -1,0 +1,22 @@
+---
+interface Props {
+  title: string;
+  skills: string[];
+}
+
+const { title, skills } = Astro.props;
+---
+
+<div class="card p-6 space-y-4">
+  <h3 class="font-heading text-lg font-semibold">{title}</h3>
+  <ul class="space-y-2">
+    {skills.map((skill) => (
+      <li class="flex items-center text-sm">
+        <svg class="mr-2 h-4 w-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+        </svg>
+        {skill}
+      </li>
+    ))}
+  </ul>
+</div>

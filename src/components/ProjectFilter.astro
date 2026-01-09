@@ -1,0 +1,297 @@
+---
+import { type Locale, t } from '@/i18n/utils';
+
+interface Props {
+  tags: string[];
+  locale: Locale;
+}
+
+const { tags, locale } = Astro.props;
+
+// Get unique tags
+const uniqueTags = [...new Set(tags)];
+
+// Categorize tags
+const categories = {
+  frontend: ['Vue.js', 'React', 'Next.js', 'TypeScript', 'JavaScript', 'Tailwind CSS', 'HTML', 'CSS'],
+  backend: ['Laravel', 'NestJS', 'ASP.NET', 'Node.js', 'PHP', 'C#', 'Python'],
+  database: ['PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'SQLite'],
+  tools: ['Docker', 'Git', 'GitHub', 'GitLab', 'CI/CD', 'Webpack', 'Vite']
+};
+
+// Group tags by category
+const categorizedTags = {
+  frontend: uniqueTags.filter(tag => categories.frontend.some(cat => tag.toLowerCase().includes(cat.toLowerCase()))),
+  backend: uniqueTags.filter(tag => categories.backend.some(cat => tag.toLowerCase().includes(cat.toLowerCase()))),
+  database: uniqueTags.filter(tag => categories.database.some(cat => tag.toLowerCase().includes(cat.toLowerCase()))),
+  tools: uniqueTags.filter(tag => categories.tools.some(cat => tag.toLowerCase().includes(cat.toLowerCase())))
+};
+
+// Get category labels based on locale
+const categoryLabels = {
+  frontend: locale === 'fr' ? 'Frontend' : 'Frontend',
+  backend: locale === 'fr' ? 'Backend' : 'Backend',
+  database: locale === 'fr' ? 'Base de données' : 'Database',
+  tools: locale === 'fr' ? 'Outils' : 'Tools'
+};
+---
+
+<div class="project-filter-container">
+  <div class="relative inline-block">
+    <button
+      id="filter-dropdown-btn"
+      class="filter-dropdown-button"
+      aria-haspopup="true"
+      aria-expanded="false"
+    >
+      <span id="filter-current-text">{t(locale, 'projects.filter_all')}</span>
+      <svg class="w-4 h-4 transition-transform" id="filter-dropdown-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+      </svg>
+    </button>
+
+    <!-- Dropdown Menu -->
+    <div
+      id="filter-dropdown-menu"
+      class="filter-dropdown-menu"
+      role="menu"
+      aria-orientation="vertical"
+    >
+      <div class="filter-dropdown-content">
+        <!-- All option -->
+        <div class="filter-dropdown-section border-b border-border pb-2 mb-2">
+          <button
+            class="filter-option active"
+            data-filter="all"
+            role="menuitem"
+          >
+            {t(locale, 'projects.filter_all')}
+          </button>
+        </div>
+
+        <!-- Frontend -->
+        {categorizedTags.frontend.length > 0 && (
+          <div class="filter-dropdown-section">
+            <div class="filter-category-label">{categoryLabels.frontend}</div>
+            {categorizedTags.frontend.map((tag) => (
+              <button
+                class="filter-option"
+                data-filter={tag}
+                role="menuitem"
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <!-- Backend -->
+        {categorizedTags.backend.length > 0 && (
+          <div class="filter-dropdown-section">
+            <div class="filter-category-label">{categoryLabels.backend}</div>
+            {categorizedTags.backend.map((tag) => (
+              <button
+                class="filter-option"
+                data-filter={tag}
+                role="menuitem"
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <!-- Database -->
+        {categorizedTags.database.length > 0 && (
+          <div class="filter-dropdown-section">
+            <div class="filter-category-label">{categoryLabels.database}</div>
+            {categorizedTags.database.map((tag) => (
+              <button
+                class="filter-option"
+                data-filter={tag}
+                role="menuitem"
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <!-- Tools -->
+        {categorizedTags.tools.length > 0 && (
+          <div class="filter-dropdown-section">
+            <div class="filter-category-label">{categoryLabels.tools}</div>
+            {categorizedTags.tools.map((tag) => (
+              <button
+                class="filter-option"
+                data-filter={tag}
+                role="menuitem"
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .filter-dropdown-button {
+    @apply px-6 py-2.5 rounded-lg text-sm font-medium transition-all duration-200;
+    @apply border border-border bg-card hover:border-primary/50 hover:bg-primary/5;
+    @apply focus:outline-none focus:ring-2 focus:ring-primary/50;
+    @apply flex items-center gap-2;
+  }
+
+  .filter-dropdown-menu {
+    @apply absolute left-0 mt-2 w-80 rounded-lg shadow-xl opacity-0 invisible;
+    @apply bg-card border border-border;
+    @apply transition-all duration-200 ease-out;
+    @apply z-50;
+    transform: translateY(-10px);
+  }
+
+  .filter-dropdown-menu.open {
+    @apply opacity-100 visible;
+    transform: translateY(0);
+  }
+
+  .filter-dropdown-content {
+    @apply p-3 space-y-3 max-h-96 overflow-y-auto;
+  }
+
+  .filter-dropdown-section {
+    @apply space-y-1;
+  }
+
+  .filter-category-label {
+    @apply text-xs font-medium text-primary px-2 mb-1;
+  }
+
+  .filter-option {
+    @apply w-full text-left px-3 py-2 rounded-md text-sm transition-colors;
+    @apply hover:bg-muted focus:outline-none focus:bg-muted;
+  }
+
+  .filter-option.active {
+    @apply bg-primary/10 text-primary font-medium;
+  }
+
+  /* Scrollbar styling */
+  .filter-dropdown-content::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .filter-dropdown-content::-webkit-scrollbar-track {
+    @apply bg-muted/30 rounded-full;
+  }
+
+  .filter-dropdown-content::-webkit-scrollbar-thumb {
+    @apply bg-muted rounded-full;
+  }
+
+  .filter-dropdown-content::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/30;
+  }
+</style>
+
+<script>
+  // Client-side filtering logic
+  document.addEventListener('DOMContentLoaded', () => {
+    const dropdownBtn = document.getElementById('filter-dropdown-btn');
+    const dropdownMenu = document.getElementById('filter-dropdown-menu');
+    const dropdownIcon = document.getElementById('filter-dropdown-icon');
+    const currentText = document.getElementById('filter-current-text');
+    const filterOptions = document.querySelectorAll('.filter-option');
+    const projectCards = document.querySelectorAll('[data-tags]');
+
+    if (!dropdownBtn || !dropdownMenu || !dropdownIcon || !currentText) return;
+
+    // Toggle dropdown
+    dropdownBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = dropdownMenu.classList.contains('open');
+
+      if (isOpen) {
+        dropdownMenu.classList.remove('open');
+        dropdownIcon.style.transform = 'rotate(0deg)';
+        dropdownBtn.setAttribute('aria-expanded', 'false');
+      } else {
+        dropdownMenu.classList.add('open');
+        dropdownIcon.style.transform = 'rotate(180deg)';
+        dropdownBtn.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!dropdownBtn.contains(e.target as Node) && !dropdownMenu.contains(e.target as Node)) {
+        dropdownMenu.classList.remove('open');
+        dropdownIcon.style.transform = 'rotate(0deg)';
+        dropdownBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Filter functionality
+    filterOptions.forEach(option => {
+      option.addEventListener('click', () => {
+        const filter = option.getAttribute('data-filter');
+        const filterText = option.textContent?.trim() || '';
+
+        // Update active state
+        filterOptions.forEach(opt => opt.classList.remove('active'));
+        option.classList.add('active');
+
+        // Update button text
+        if (currentText) {
+          currentText.textContent = filterText;
+        }
+
+        // Close dropdown
+        dropdownMenu.classList.remove('open');
+        dropdownIcon.style.transform = 'rotate(0deg)';
+        dropdownBtn.setAttribute('aria-expanded', 'false');
+
+        // Filter projects
+        projectCards.forEach(card => {
+          const cardTags = card.getAttribute('data-tags')?.toLowerCase() || '';
+
+          if (filter && (filter === 'all' || cardTags.includes(filter.toLowerCase()))) {
+            // Show card with animation
+            card.classList.remove('hidden');
+            if (card instanceof HTMLElement) {
+              card.style.animation = 'fadeIn 0.3s ease-in-out';
+            }
+          } else {
+            // Hide card
+            card.classList.add('hidden');
+          }
+        });
+      });
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && dropdownMenu.classList.contains('open')) {
+        dropdownMenu.classList.remove('open');
+        dropdownIcon.style.transform = 'rotate(0deg)';
+        dropdownBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+  });
+</script>
+
+<style is:global>
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

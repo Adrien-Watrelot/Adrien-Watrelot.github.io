@@ -1,0 +1,21 @@
+---
+import { type Locale, switchLanguage, t } from '@/i18n/utils';
+
+interface Props {
+  currentLocale: Locale;
+  currentPath: string;
+}
+
+const { currentLocale, currentPath } = Astro.props;
+
+const otherLocale = currentLocale === 'fr' ? 'en' : 'fr';
+const switchUrl = switchLanguage(currentPath, otherLocale);
+---
+
+<a
+  href={switchUrl}
+  class="inline-flex h-9 items-center justify-center rounded-md border border-input bg-background px-3 text-sm font-medium hover:bg-accent hover:text-accent-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+  aria-label={t(currentLocale, 'lang.switch')}
+>
+  <span class="font-mono text-xs font-semibold uppercase">{otherLocale}</span>
+</a>

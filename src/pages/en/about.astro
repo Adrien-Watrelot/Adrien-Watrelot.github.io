@@ -1,0 +1,283 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Timeline from '@/components/Timeline.astro';
+import { t, getLocalizedPath } from '@/i18n/utils';
+
+const locale = 'en';
+
+// Experience data
+const experiences = [
+  {
+    title: t(locale, 'about.exp_helmo_title'),
+    company: t(locale, 'about.exp_helmo_company'),
+    location: t(locale, 'about.exp_helmo_location'),
+    period: t(locale, 'about.exp_helmo_period'),
+    duration: t(locale, 'about.exp_helmo_duration'),
+    description: t(locale, 'about.exp_helmo_desc'),
+  },
+  {
+    title: t(locale, 'about.exp_taverne_title'),
+    company: t(locale, 'about.exp_taverne_company'),
+    location: t(locale, 'about.exp_taverne_location'),
+    period: t(locale, 'about.exp_taverne_period'),
+    duration: t(locale, 'about.exp_taverne_duration'),
+    description: t(locale, 'about.exp_taverne_desc'),
+  },
+  {
+    title: t(locale, 'about.exp_colona_title'),
+    company: t(locale, 'about.exp_colona_company'),
+    location: t(locale, 'about.exp_colona_location'),
+    period: t(locale, 'about.exp_colona_period'),
+    duration: t(locale, 'about.exp_colona_duration'),
+    description: t(locale, 'about.exp_colona_desc'),
+  },
+];
+
+// Education data
+const education = [
+  {
+    title: t(locale, 'about.edu_bachelor_degree'),
+    company: t(locale, 'about.edu_bachelor_school'),
+    period: t(locale, 'about.edu_bachelor_period'),
+    description: t(locale, 'about.edu_bachelor_desc'),
+  },
+];
+
+// Interests with Heroicons
+const interests = [
+  {
+    icon: 'beaker', // Represents aquarium/science
+    name: t(locale, 'about.interest_aquarium')
+  },
+  {
+    icon: 'device-phone-mobile', // Represents video games/gaming
+    name: t(locale, 'about.interest_gaming')
+  },
+  {
+    icon: 'musical-note',
+    name: t(locale, 'about.interest_music')
+  },
+  {
+    icon: 'fire', // Represents energy/sports
+    name: t(locale, 'about.interest_sport')
+  },
+];
+---
+
+<BaseLayout
+  title={t(locale, 'nav.about')}
+  description="Discover my journey as a Full-Stack developer, my professional experiences and my education."
+  locale={locale}
+>
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-5xl space-y-16">
+
+        <!-- Header with photo and CV button -->
+        <div class="text-center space-y-8 animate-fade-in-up">
+          <!-- Profile photo -->
+          <div class="flex justify-center">
+            <div class="profile-photo-wrapper">
+              <img
+                src="/images/profile/adrien-watrelot.jpg"
+                alt="Adrien Watrelot"
+                class="profile-photo"
+              />
+            </div>
+          </div>
+
+          <h1 class="font-heading text-4xl font-bold tracking-tight sm:text-5xl">
+            {t(locale, 'about.title')}
+          </h1>
+
+          <a
+            href="/cv/Adrien_Watrelot_CV_FR.pdf"
+            download
+            class="btn btn-primary inline-flex items-center gap-2 px-6 py-3"
+          >
+            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            {t(locale, 'about.download_cv')}
+          </a>
+        </div>
+
+        <!-- Introduction -->
+        <div class="card p-8 space-y-6 animate-fade-in-up" style="animation-delay: 0.1s;">
+          <div class="flex items-center gap-4 mb-4">
+            <div class="w-1 h-12 bg-primary rounded-full"></div>
+            <h2 class="font-heading text-3xl font-bold">
+              {t(locale, 'about.intro_greeting')}
+            </h2>
+          </div>
+
+          <p class="text-xl text-primary font-medium">
+            {t(locale, 'about.intro_role')}
+          </p>
+
+          <div class="prose prose-lg dark:prose-invert max-w-none space-y-4">
+            <p class="text-muted-foreground leading-relaxed">
+              {t(locale, 'about.intro_description')}
+            </p>
+            <p class="text-muted-foreground leading-relaxed">
+              {t(locale, 'about.intro_goal')}
+            </p>
+          </div>
+
+          <!-- Quick Stats -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6 border-t border-border">
+            <div class="text-center">
+              <div class="text-3xl font-bold text-primary">2019</div>
+              <div class="text-sm text-muted-foreground mt-1">Started studies</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-primary">6+</div>
+              <div class="text-sm text-muted-foreground mt-1">Projects completed</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-primary">4</div>
+              <div class="text-sm text-muted-foreground mt-1">Months internship</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-bold text-primary">12+</div>
+              <div class="text-sm text-muted-foreground mt-1">Technologies</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Professional Experience -->
+        <div class="space-y-6 animate-fade-in-up" style="animation-delay: 0.2s;">
+          <div class="flex items-center gap-4">
+            <div class="w-1 h-12 bg-primary rounded-full"></div>
+            <h2 class="font-heading text-3xl font-bold">
+              {t(locale, 'about.experience_title')}
+            </h2>
+          </div>
+          <Timeline items={experiences} />
+        </div>
+
+        <!-- Education -->
+        <div class="space-y-6 animate-fade-in-up" style="animation-delay: 0.3s;">
+          <div class="flex items-center gap-4">
+            <div class="w-1 h-12 bg-primary rounded-full"></div>
+            <h2 class="font-heading text-3xl font-bold">
+              {t(locale, 'about.education_title')}
+            </h2>
+          </div>
+          <Timeline items={education} />
+        </div>
+
+        <!-- Skills Highlight -->
+        <div class="card p-8 space-y-6 animate-fade-in-up" style="animation-delay: 0.4s;">
+          <div class="flex items-center gap-4">
+            <div class="w-1 h-12 bg-primary rounded-full"></div>
+            <h2 class="font-heading text-2xl font-bold">
+              {t(locale, 'about.skills_highlight_title')}
+            </h2>
+          </div>
+          <p class="text-muted-foreground">
+            {t(locale, 'about.skills_highlight_desc')}
+          </p>
+          <a
+            href={getLocalizedPath(locale, 'skills')}
+            class="inline-flex items-center text-sm font-medium text-primary hover:underline"
+          >
+            {t(locale, 'about.skills_highlight_link')}
+            <svg class="ml-1 h-4 w-4 transition-transform hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </a>
+        </div>
+
+        <!-- Interests -->
+        <div class="card p-8 space-y-6 animate-fade-in-up" style="animation-delay: 0.5s;">
+          <div class="flex items-center gap-4">
+            <div class="w-1 h-12 bg-primary rounded-full"></div>
+            <h2 class="font-heading text-2xl font-bold">
+              {t(locale, 'about.interests_title')}
+            </h2>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {interests.map((interest) => (
+              <div class="interest-card">
+                {interest.icon === 'beaker' && (
+                  <svg class="interest-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                  </svg>
+                )}
+                {interest.icon === 'device-phone-mobile' && (
+                  <svg class="interest-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 01-.657.643 48.39 48.39 0 01-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 01-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 00-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 01-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 00.657-.643v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 01-.349-1.003c0-1.035 1.008-1.875 2.25-1.875 1.243 0 2.25.84 2.25 1.875 0 .369-.128.713-.349 1.003-.215.283-.4.604-.4.959v0c0 .333.277.599.61.58a48.1 48.1 0 005.427-.63 48.05 48.05 0 00.582-4.717.532.532 0 00-.533-.57v0c-.355 0-.676.186-.959.401-.29.221-.634.349-1.003.349-1.035 0-1.875-1.007-1.875-2.25s.84-2.25 1.875-2.25c.37 0 .713.128 1.003.349.283.215.604.401.96.401v0a.656.656 0 00.658-.663 48.422 48.422 0 00-.37-5.36c-1.886.342-3.81.574-5.766.689a.578.578 0 01-.61-.58v0z" />
+                  </svg>
+                )}
+                {interest.icon === 'musical-note' && (
+                  <svg class="interest-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                  </svg>
+                )}
+                {interest.icon === 'fire' && (
+                  <svg class="interest-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" />
+                  </svg>
+                )}
+                <span class="text-sm font-medium">{interest.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Final CTA -->
+        <div class="text-center space-y-6 animate-fade-in-up" style="animation-delay: 0.6s;">
+          <p class="text-lg text-muted-foreground">
+            {t(locale, 'about.cta_text')}
+          </p>
+          <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <a href={getLocalizedPath(locale, 'contact')} class="btn btn-primary px-8 py-3">
+              {t(locale, 'about.cta_contact')}
+            </a>
+            <a href={getLocalizedPath(locale, 'projects')} class="btn btn-outline px-8 py-3">
+              {t(locale, 'about.cta_projects')}
+            </a>
+            <a
+              href="https://www.linkedin.com/in/adrien-watrelot-80371025b/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="btn btn-outline px-8 py-3 inline-flex items-center gap-2"
+            >
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+              {t(locale, 'about.cta_linkedin')}
+            </a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .profile-photo-wrapper {
+    @apply relative inline-block;
+  }
+
+  .profile-photo {
+    @apply w-40 h-40 rounded-full object-cover;
+    @apply border-4 border-primary/20;
+    @apply shadow-lg;
+    object-position: center 20%; /* Focus on face */
+  }
+
+  .interest-card {
+    @apply flex flex-col items-center gap-3 p-4 rounded-lg;
+    @apply bg-muted/50 hover:bg-muted transition-all duration-300;
+    @apply hover:scale-105 hover:shadow-md;
+    @apply border border-border hover:border-primary/30;
+  }
+
+  .interest-icon {
+    @apply w-8 h-8 text-primary;
+  }
+</style>

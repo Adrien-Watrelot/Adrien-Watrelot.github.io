@@ -1,0 +1,100 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import SkillBadge from '@/components/SkillBadge.astro';
+import { t } from '@/i18n/utils';
+import { skillsFr } from '@/config/skills';
+
+const locale = 'fr';
+
+// Group skills by category
+const frontendSkills = skillsFr.filter(s => s.category === 'frontend');
+const backendSkills = skillsFr.filter(s => s.category === 'backend');
+const databaseSkills = skillsFr.filter(s => s.category === 'database');
+const toolsSkills = skillsFr.filter(s => s.category === 'tools');
+const softSkills = skillsFr.filter(s => s.category === 'soft');
+---
+
+<BaseLayout title={t(locale, 'nav.skills')} locale={locale}>
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-6xl space-y-16">
+        <!-- Header -->
+        <div class="text-center space-y-4 animate-fade-in-up">
+          <h1 class="font-heading text-4xl font-bold tracking-tight sm:text-5xl">
+            {t(locale, 'skills.title')}
+          </h1>
+          <p class="text-lg text-muted-foreground">
+            {t(locale, 'skills.subtitle')}
+          </p>
+        </div>
+
+        <!-- Frontend Skills -->
+        <div class="space-y-6 animate-fade-in-up" style="animation-delay: 0.1s;">
+          <h2 class="font-heading text-2xl font-semibold text-foreground border-l-4 border-primary pl-4">
+            {t(locale, 'skills.frontend')}
+          </h2>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {frontendSkills.map((skill) => (
+              <SkillBadge name={skill.name} icon={skill.icon} />
+            ))}
+          </div>
+        </div>
+
+        <!-- Backend Skills -->
+        <div class="space-y-6 animate-fade-in-up" style="animation-delay: 0.2s;">
+          <h2 class="font-heading text-2xl font-semibold text-foreground border-l-4 border-primary pl-4">
+            {t(locale, 'skills.backend')}
+          </h2>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {backendSkills.map((skill) => (
+              <SkillBadge name={skill.name} icon={skill.icon} />
+            ))}
+          </div>
+        </div>
+
+        <!-- Database Skills -->
+        <div class="space-y-6 animate-fade-in-up" style="animation-delay: 0.3s;">
+          <h2 class="font-heading text-2xl font-semibold text-foreground border-l-4 border-primary pl-4">
+            {t(locale, 'skills.database')}
+          </h2>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {databaseSkills.map((skill) => (
+              <SkillBadge name={skill.name} icon={skill.icon} />
+            ))}
+          </div>
+        </div>
+
+        <!-- Tools & DevOps Skills -->
+        <div class="space-y-6 animate-fade-in-up" style="animation-delay: 0.4s;">
+          <h2 class="font-heading text-2xl font-semibold text-foreground border-l-4 border-primary pl-4">
+            {t(locale, 'skills.tools')}
+          </h2>
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {toolsSkills.map((skill) => (
+              <SkillBadge name={skill.name} icon={skill.icon} />
+            ))}
+          </div>
+        </div>
+
+        <!-- Soft Skills -->
+        <div class="space-y-6 animate-fade-in-up" style="animation-delay: 0.5s;">
+          <h2 class="font-heading text-2xl font-semibold text-foreground border-l-4 border-primary pl-4">
+            {t(locale, 'skills.soft')}
+          </h2>
+          <div class="card p-6">
+            <ul class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+              {softSkills.map((skill) => (
+                <li class="flex items-center text-sm">
+                  <svg class="mr-2 h-4 w-4 text-primary flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  <span>{skill.name}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

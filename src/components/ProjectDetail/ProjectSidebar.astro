@@ -1,0 +1,186 @@
+---
+import { type Locale, t } from '@/i18n/utils';
+
+interface Props {
+  date: Date;
+  tags: string[];
+  demoUrl?: string;
+  githubUrl?: string;
+  locale: Locale;
+}
+
+const { date, tags, demoUrl, githubUrl, locale } = Astro.props;
+
+// Format date
+const formattedDate = date.toLocaleDateString(locale === 'fr' ? 'fr-FR' : 'en-US', {
+  year: 'numeric',
+  month: 'long'
+});
+
+// Catégorisation des tags pour affichage coloré
+const getTagColor = (tag: string): string => {
+  const frontendTags = ['Next.js', 'React', 'Vue.js', 'TypeScript', 'JavaScript', 'Tailwind CSS', 'Astro'];
+  const backendTags = ['NestJS', 'Laravel', 'ASP.NET', 'Node.js', 'PHP', 'C#'];
+  const databaseTags = ['PostgreSQL', 'MySQL', 'MongoDB', 'Prisma', 'SQLite'];
+  const toolsTags = ['Docker', 'Git', 'GitHub', 'GitLab', 'CI/CD'];
+
+  if (frontendTags.some(t => tag.includes(t))) return 'blue';
+  if (backendTags.some(t => tag.includes(t))) return 'green';
+  if (databaseTags.some(t => tag.includes(t))) return 'purple';
+  if (toolsTags.some(t => tag.includes(t))) return 'orange';
+  return 'pink';
+};
+---
+
+<aside class="project-sidebar">
+  <!-- Project Image Placeholder -->
+  <div class="project-image-placeholder">
+    <svg class="w-16 h-16 text-muted-foreground opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+    </svg>
+  </div>
+
+  <!-- Metadata -->
+  <div class="space-y-4 mt-6">
+    <div>
+      <div class="sidebar-label">{t(locale, 'projects.date')}</div>
+      <div class="sidebar-value">{formattedDate}</div>
+    </div>
+
+    <div>
+      <div class="sidebar-label">{t(locale, 'projects.role')}</div>
+      <div class="sidebar-value">Full-Stack Developer</div>
+    </div>
+
+    <div>
+      <div class="sidebar-label">{t(locale, 'projects.technologies')}</div>
+      <div class="flex flex-wrap gap-2 mt-2">
+        {tags.slice(0, 6).map((tag) => {
+          const color = getTagColor(tag);
+          return (
+            <span class={`tech-badge tech-badge-${color}`}>
+              {tag}
+            </span>
+          );
+        })}
+        {tags.length > 6 && (
+          <span class="tech-badge tech-badge-gray">
+            +{tags.length - 6}
+          </span>
+        )}
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Buttons -->
+  {(demoUrl || githubUrl) && (
+    <div class="mt-6 space-y-3">
+      {demoUrl && (
+        <a
+          href={demoUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-sidebar btn-sidebar-primary"
+        >
+          {t(locale, 'projects.view_demo')} →
+        </a>
+      )}
+      {githubUrl && (
+        <a
+          href={githubUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="btn-sidebar btn-sidebar-outline"
+        >
+          {t(locale, 'projects.view_code')}
+        </a>
+      )}
+    </div>
+  )}
+</aside>
+
+<style>
+  .project-sidebar {
+    @apply rounded-lg border bg-card p-6;
+    position: sticky;
+    top: 2rem;
+  }
+
+  .project-image-placeholder {
+    @apply w-full h-40 rounded-lg flex items-center justify-center;
+    background: linear-gradient(135deg, hsl(var(--primary) / 0.2) 0%, hsl(var(--primary) / 0.1) 100%);
+  }
+
+  .sidebar-label {
+    @apply text-xs uppercase font-semibold mb-1;
+    color: var(--color-text-muted);
+  }
+
+  .sidebar-value {
+    @apply text-sm;
+    color: var(--color-text);
+  }
+
+  .tech-badge {
+    @apply px-2 py-1 rounded text-xs font-medium;
+  }
+
+  .tech-badge-blue {
+    background: hsl(217 91% 60% / 0.1);
+    color: hsl(217 91% 60%);
+    border: 1px solid hsl(217 91% 60% / 0.3);
+  }
+
+  .tech-badge-green {
+    background: hsl(142 76% 36% / 0.1);
+    color: hsl(142 76% 36%);
+    border: 1px solid hsl(142 76% 36% / 0.3);
+  }
+
+  .tech-badge-purple {
+    background: hsl(262 83% 58% / 0.1);
+    color: hsl(262 83% 58%);
+    border: 1px solid hsl(262 83% 58% / 0.3);
+  }
+
+  .tech-badge-orange {
+    background: hsl(25 95% 53% / 0.1);
+    color: hsl(25 95% 53%);
+    border: 1px solid hsl(25 95% 53% / 0.3);
+  }
+
+  .tech-badge-pink {
+    background: hsl(330 81% 60% / 0.1);
+    color: hsl(330 81% 60%);
+    border: 1px solid hsl(330 81% 60% / 0.3);
+  }
+
+  .tech-badge-gray {
+    background: var(--color-muted);
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+  }
+
+  .btn-sidebar {
+    @apply block w-full px-4 py-3 rounded-lg text-center font-medium transition-colors text-sm;
+  }
+
+  .btn-sidebar-primary {
+    background: hsl(var(--primary));
+    color: hsl(var(--primary-foreground));
+  }
+
+  .btn-sidebar-primary:hover {
+    background: hsl(var(--primary) / 0.9);
+  }
+
+  .btn-sidebar-outline {
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+  }
+
+  .btn-sidebar-outline:hover {
+    border-color: hsl(var(--primary));
+    background: hsl(var(--primary) / 0.05);
+  }
+</style>

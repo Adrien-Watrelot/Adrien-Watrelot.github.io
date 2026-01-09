@@ -1,0 +1,43 @@
+---
+import { type Locale, t } from '@/i18n/utils';
+
+interface Props {
+  title: string;
+  description: string;
+  tags: string[];
+  href: string;
+  locale: Locale;
+}
+
+const { title, description, tags, href, locale } = Astro.props;
+---
+
+<article class="card group overflow-hidden transition-all hover:shadow-lg">
+  <a href={href} class="block p-6">
+    <div class="space-y-4">
+      <div class="space-y-2">
+        <h3 class="font-heading text-xl font-semibold group-hover:text-primary transition-colors">
+          {title}
+        </h3>
+        <p class="text-sm text-muted-foreground line-clamp-2">
+          {description}
+        </p>
+      </div>
+
+      <div class="flex flex-wrap gap-2">
+        {tags.map((tag) => (
+          <span class="badge badge-secondary text-xs">
+            {tag}
+          </span>
+        ))}
+      </div>
+
+      <div class="flex items-center text-sm font-medium text-primary">
+        {t(locale, 'projects.view_project')}
+        <svg class="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </div>
+    </div>
+  </a>
+</article>

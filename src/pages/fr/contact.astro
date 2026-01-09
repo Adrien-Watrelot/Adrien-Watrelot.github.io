@@ -1,0 +1,149 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { t } from '@/i18n/utils';
+
+const locale = 'fr';
+---
+
+<BaseLayout title={t(locale, 'nav.contact')} locale={locale}>
+  <section class="py-16 md:py-24">
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl space-y-12">
+        <!-- Header -->
+        <div class="text-center space-y-4 animate-fade-in-up">
+          <h1 class="font-heading text-4xl font-bold tracking-tight sm:text-5xl">
+            {t(locale, 'contact.title')}
+          </h1>
+          <p class="text-lg text-muted-foreground">
+            {t(locale, 'contact.subtitle')}
+          </p>
+        </div>
+
+        <!-- Contact Form -->
+        <div class="card p-8 animate-fade-in-up" style="animation-delay: 0.1s;">
+          <form
+            id="contact-form"
+            action="https://formspree.io/f/xaqnazgy"
+            method="POST"
+            class="space-y-6"
+          >
+            <div class="space-y-2">
+              <label for="name" class="block text-sm font-medium">
+                {t(locale, 'contact.name')}
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                minlength="2"
+                maxlength="100"
+                class="w-full rounded-md border border-input bg-background px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              />
+            </div>
+
+            <div class="space-y-2">
+              <label for="email" class="block text-sm font-medium">
+                {t(locale, 'contact.email')}
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                class="w-full rounded-md border border-input bg-background px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              />
+            </div>
+
+            <div class="space-y-2">
+              <label for="message" class="block text-sm font-medium">
+                {t(locale, 'contact.message')}
+              </label>
+              <textarea
+                id="message"
+                name="message"
+                rows="6"
+                required
+                minlength="10"
+                maxlength="5000"
+                class="w-full rounded-md border border-input bg-background px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              ></textarea>
+            </div>
+
+            <!-- Honeypot field - hidden from users, catches bots -->
+            <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
+
+            <div>
+              <button type="submit" class="btn btn-primary w-full px-8 py-3">
+                {t(locale, 'contact.send')}
+              </button>
+            </div>
+
+            <div id="form-message" class="hidden text-center text-sm"></div>
+          </form>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="text-center text-sm text-muted-foreground animate-fade-in-up" style="animation-delay: 0.2s;">
+          <p>TODO: Ajouter vos coordonnées de contact (email, LinkedIn, etc.)</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const messageDiv = document.getElementById('form-message');
+
+  form?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Show loading state
+    const submitButton = form.querySelector('button[type="submit"]') as HTMLButtonElement;
+    const originalText = submitButton.textContent;
+    submitButton.disabled = true;
+    submitButton.textContent = 'Envoi en cours...';
+
+    try {
+      // Submit form data to Formspree
+      const formData = new FormData(form);
+      const response = await fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        // Show success message
+        if (messageDiv) {
+          messageDiv.textContent = 'Message envoyé avec succès !';
+          messageDiv.classList.remove('hidden', 'text-red-500');
+          messageDiv.classList.add('text-green-500');
+        }
+        // Reset form
+        form.reset();
+      } else {
+        // Show error message
+        if (messageDiv) {
+          messageDiv.textContent = 'Une erreur est survenue. Veuillez réessayer.';
+          messageDiv.classList.remove('hidden', 'text-green-500');
+          messageDiv.classList.add('text-red-500');
+        }
+      }
+    } catch (error) {
+      // Show error message
+      if (messageDiv) {
+        messageDiv.textContent = 'Une erreur est survenue. Veuillez réessayer.';
+        messageDiv.classList.remove('hidden', 'text-green-500');
+        messageDiv.classList.add('text-red-500');
+      }
+    } finally {
+      // Reset button state
+      submitButton.disabled = false;
+      submitButton.textContent = originalText || 'Envoyer';
+    }
+  });
+</script>

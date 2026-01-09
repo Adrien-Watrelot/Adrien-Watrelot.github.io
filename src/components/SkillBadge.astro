@@ -1,0 +1,168 @@
+---
+interface Props {
+  name: string;
+  icon?: string;
+}
+
+const { name, icon } = Astro.props;
+
+// Extract icon name from path for CSS targeting
+const iconName = icon?.split('/').pop()?.replace('.svg', '') || '';
+---
+
+<div class="skill-badge group">
+  {icon && (
+    <div class="skill-icon" data-icon={iconName}>
+      <img src={icon} alt={`${name} logo`} />
+    </div>
+  )}
+  <span class="skill-name">{name}</span>
+</div>
+
+<style>
+  .skill-badge {
+    @apply flex flex-col items-center justify-center gap-3 p-4 rounded-lg border border-border bg-card/50 transition-all duration-300 hover:shadow-lg hover:scale-105 hover:bg-card hover:border-primary/50;
+    min-height: 120px;
+  }
+
+  .skill-icon {
+    @apply w-12 h-12 flex items-center justify-center;
+  }
+
+  .skill-icon img {
+    @apply w-full h-full object-contain transition-transform duration-300 group-hover:scale-110;
+  }
+
+  /* Apply official brand colors to SVG icons using CSS filters */
+  /* Note: Some SVGs already have colors embedded (vuedotjs, csharp) - don't apply filters */
+
+  /* Vue.js - Already has colors in SVG */
+  .skill-icon[data-icon="vuedotjs"] img {
+    filter: none;
+  }
+
+  /* React - #61DAFB (cyan) */
+  .skill-icon[data-icon="react"] img {
+    filter: invert(70%) sepia(64%) saturate(449%) hue-rotate(158deg) brightness(101%) contrast(98%);
+  }
+
+  /* Next.js - Keep black/white */
+  .skill-icon[data-icon="nextdotjs"] img {
+    filter: none;
+  }
+  :global(.dark) .skill-icon[data-icon="nextdotjs"] img {
+    filter: invert(1);
+  }
+
+  /* TypeScript - #3178C6 (blue) */
+  .skill-icon[data-icon="typescript"] img {
+    filter: invert(38%) sepia(93%) saturate(1199%) hue-rotate(191deg) brightness(91%) contrast(88%);
+  }
+
+  /* Astro - #FF5D01 (orange) */
+  .skill-icon[data-icon="astro"] img {
+    filter: invert(43%) sepia(98%) saturate(5033%) hue-rotate(5deg) brightness(103%) contrast(104%);
+  }
+
+  /* Tailwind CSS - #06B6D4 (cyan) */
+  .skill-icon[data-icon="tailwindcss"] img {
+    filter: invert(58%) sepia(78%) saturate(1739%) hue-rotate(153deg) brightness(92%) contrast(95%);
+  }
+
+  /* Bootstrap - #7952B3 (purple) */
+  .skill-icon[data-icon="bootstrap"] img {
+    filter: invert(36%) sepia(32%) saturate(1725%) hue-rotate(229deg) brightness(93%) contrast(87%);
+  }
+
+  /* Vite - #646CFF (purple) */
+  .skill-icon[data-icon="vite"] img {
+    filter: invert(44%) sepia(91%) saturate(2829%) hue-rotate(232deg) brightness(102%) contrast(101%);
+  }
+
+  /* .NET - #512BD4 (purple) */
+  .skill-icon[data-icon="dotnet"] img {
+    filter: invert(20%) sepia(91%) saturate(3317%) hue-rotate(250deg) brightness(89%) contrast(96%);
+  }
+
+  /* C# - Already has colors in SVG (purple gradient) */
+  .skill-icon[data-icon="csharp"] img {
+    filter: none;
+  }
+
+  /* NestJS - #E0234E (red) */
+  .skill-icon[data-icon="nestjs"] img {
+    filter: invert(20%) sepia(94%) saturate(3158%) hue-rotate(338deg) brightness(91%) contrast(93%);
+  }
+
+  /* Node.js - #339933 (green) */
+  .skill-icon[data-icon="nodedotjs"] img {
+    filter: invert(49%) sepia(55%) saturate(1604%) hue-rotate(94deg) brightness(91%) contrast(87%);
+  }
+
+  /* Laravel - #FF2D20 (red) */
+  .skill-icon[data-icon="laravel"] img {
+    filter: invert(26%) sepia(98%) saturate(4855%) hue-rotate(356deg) brightness(101%) contrast(105%);
+  }
+
+  /* PHP - #777BB4 (purple) */
+  .skill-icon[data-icon="php"] img {
+    filter: invert(50%) sepia(17%) saturate(1387%) hue-rotate(204deg) brightness(85%) contrast(86%);
+  }
+
+  /* PostgreSQL - #4169E1 (blue) */
+  .skill-icon[data-icon="postgresql"] img {
+    filter: invert(39%) sepia(99%) saturate(1835%) hue-rotate(212deg) brightness(93%) contrast(91%);
+  }
+
+  /* MySQL - #4479A1 (blue) */
+  .skill-icon[data-icon="mysql"] img {
+    filter: invert(40%) sepia(41%) saturate(853%) hue-rotate(166deg) brightness(88%) contrast(84%);
+  }
+
+  /* SQLite - #003B57 (dark blue) */
+  .skill-icon[data-icon="sqlite"] img {
+    filter: invert(18%) sepia(51%) saturate(2088%) hue-rotate(173deg) brightness(95%) contrast(101%);
+  }
+
+  /* Git - #F05032 (orange-red) */
+  .skill-icon[data-icon="git"] img {
+    filter: invert(45%) sepia(86%) saturate(2516%) hue-rotate(347deg) brightness(98%) contrast(94%);
+  }
+
+  /* Docker - #2496ED (blue) */
+  .skill-icon[data-icon="docker"] img {
+    filter: invert(51%) sepia(77%) saturate(3024%) hue-rotate(188deg) brightness(98%) contrast(89%);
+  }
+
+  /* GitLab - #FC6D26 (orange) */
+  .skill-icon[data-icon="gitlab"] img {
+    filter: invert(56%) sepia(91%) saturate(2702%) hue-rotate(352deg) brightness(101%) contrast(98%);
+  }
+
+  /* GitHub - Keep black/white */
+  .skill-icon[data-icon="github"] img {
+    filter: none;
+  }
+  :global(.dark) .skill-icon[data-icon="github"] img {
+    filter: invert(1);
+  }
+
+  /* pnpm - #F69220 (orange) */
+  .skill-icon[data-icon="pnpm"] img {
+    filter: invert(66%) sepia(49%) saturate(4082%) hue-rotate(358deg) brightness(99%) contrast(96%);
+  }
+
+  /* Jest - #C21325 (red) */
+  .skill-icon[data-icon="jest"] img {
+    filter: invert(18%) sepia(88%) saturate(3220%) hue-rotate(345deg) brightness(88%) contrast(99%);
+  }
+
+  /* Swagger - #85EA2D (green) */
+  .skill-icon[data-icon="swagger"] img {
+    filter: invert(84%) sepia(42%) saturate(1691%) hue-rotate(35deg) brightness(96%) contrast(92%);
+  }
+
+  .skill-name {
+    @apply text-sm font-medium text-center text-foreground;
+  }
+</style>
