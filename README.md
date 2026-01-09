@@ -155,68 +155,31 @@ Edit CSS variables in `src/styles/global.css`:
 }
 ```
 
-## Deployment
+## CI/CD Pipeline
 
-This site is configured for GitHub Pages deployment via GitHub Actions.
+This project uses GitHub Actions for continuous integration and deployment:
 
-### Recommended Workflow
+### Workflows
 
-Create `.github/workflows/deploy.yml`:
+- **CI Pipeline** (`.github/workflows/ci.yml`): Validates pull requests with type checking and build tests
+- **Deploy Pipeline** (`.github/workflows/deploy.yml`): Automatically deploys to GitHub Pages on push to `main`
 
-```yaml
-name: Deploy to GitHub Pages
+### Development Workflow
 
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build
-        run: npm run build
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-```
+1. Create a feature branch from `dev`
+2. Make your changes and commit
+3. Push to remote and create a pull request to `main`
+4. CI pipeline runs automatically to validate code
+5. After approval and merge, deploy pipeline automatically publishes to production
 
 ### GitHub Pages Settings
 
-1. Go to repository Settings → Pages
+The site is deployed via GitHub Actions to: `https://adrien-watrelot.github.io/`
+
+To configure:
+1. Repository Settings → Pages
 2. Source: GitHub Actions
-3. The site will be available at: `https://Adrien-Watrelot.github.io/`
+3. Deploy from `main` branch
 
 ## Browser Support
 
@@ -228,7 +191,3 @@ jobs:
 ## License
 
 All rights reserved © 2026 Adrien Watrelot
-
-## Contact
-
-TODO: Add your contact information
