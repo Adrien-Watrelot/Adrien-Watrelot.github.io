@@ -19,7 +19,13 @@ const projectUrl = getLocalizedPath(locale, `projects/${slug}`);
     <!-- Image Section -->
     {image && (
       <div class="featured-project-image">
-        <img src={image} alt={title} />
+        <img
+          src={image}
+          alt={title}
+          loading="eager"
+          decoding="async"
+          class="object-cover w-full h-full"
+        />
       </div>
     )}
     {!image && (

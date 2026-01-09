@@ -85,6 +85,11 @@ const personSchema = {
     <!-- Structured Data (JSON-LD) -->
     <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
 
+    <!-- Analytics (Plausible) - Uncomment when ready to track -->
+    <!--
+    <script defer data-domain="adrien-watrelot.github.io" src="https://plausible.io/js/script.js"></script>
+    -->
+
     <title>{fullTitle}</title>
 
     <!-- Inline script to prevent FOUC (Flash of Unstyled Content) -->
