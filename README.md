@@ -2,6 +2,8 @@
 
 Modern portfolio website built with Astro, featuring internationalization (French/English), dark mode, and static site generation optimized for GitHub Pages.
 
+🚀 **Live Site**: [adrien-watrelot.github.io](https://adrien-watrelot.github.io)
+
 ## Features
 
 - **Static Site Generation**: Built with Astro for optimal performance
