@@ -28,10 +28,3 @@ pnpm-debug.log*
 
 # OS files
 Thumbs.db
-
-# Local documentation (not for GitHub)
-BUILD_SUCCESS.md
-COMMIT_GUIDE.md
-PROJECT_SUMMARY.md
-QUICK_START.md
-.claude/

@@ -14,6 +14,9 @@ interface Props {
 const { title, description = '', locale, ogImage } = Astro.props;
 const currentPath = Astro.url.pathname;
 
+// reCAPTCHA Site Key
+const recaptchaSiteKey = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
+
 const fullTitle = title ? `${title} | Adrien Watrelot` : 'Adrien Watrelot - Full-Stack Developer';
 const siteDescription = description || 'Portfolio of Adrien Watrelot, Full-Stack Developer specializing in Vue.js, React, Laravel, and ASP.NET. Modern and performant web applications.';
 
@@ -92,6 +95,15 @@ const personSchema = {
     <!--
     <script defer data-domain="adrien-watrelot.github.io" src="https://plausible.io/js/script.js"></script>
     -->
+
+    <!-- Google reCAPTCHA v3 -->
+    {recaptchaSiteKey && (
+      <script
+        src={`https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`}
+        async
+        defer
+      ></script>
+    )}
 
     <title>{fullTitle}</title>
 

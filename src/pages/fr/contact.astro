@@ -73,6 +73,9 @@ const locale = 'fr';
             <!-- Honeypot field - hidden from users, catches bots -->
             <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
 
+            <!-- reCAPTCHA token -->
+            <input type="hidden" name="g-recaptcha-response" id="recaptcha-token-fr" />
+
             <div>
               <button type="submit" class="btn btn-primary w-full px-8 py-3">
                 {t(locale, 'contact.send')}
@@ -115,6 +118,9 @@ const locale = 'fr';
 </BaseLayout>
 
 <script>
+  // Get reCAPTCHA site key from environment
+  const RECAPTCHA_SITE_KEY = import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY;
+
   const form = document.getElementById('contact-form') as HTMLFormElement;
   const messageDiv = document.getElementById('form-message');
 
@@ -128,6 +134,18 @@ const locale = 'fr';
     submitButton.textContent = 'Envoi en cours...';
 
     try {
+      // Check if reCAPTCHA is loaded and configured
+      if (typeof grecaptcha === 'undefined' || !RECAPTCHA_SITE_KEY) {
+        throw new Error('reCAPTCHA not loaded');
+      }
+
+      // Get reCAPTCHA v3 token
+      const token = await grecaptcha.execute(RECAPTCHA_SITE_KEY, { action: 'contact_form' });
+
+      // Add token to hidden field
+      const tokenInput = document.getElementById('recaptcha-token-fr') as HTMLInputElement;
+      if (tokenInput) tokenInput.value = token;
+
       // Submit form data to Formspree
       const formData = new FormData(form);
       const response = await fetch(form.action, {
@@ -149,13 +167,15 @@ const locale = 'fr';
         form.reset();
       } else {
         // Show error message
+        const data = await response.json();
         if (messageDiv) {
-          messageDiv.textContent = 'Une erreur est survenue. Veuillez réessayer.';
+          messageDiv.textContent = data.error || 'Une erreur est survenue. Veuillez réessayer.';
           messageDiv.classList.remove('hidden', 'text-green-500');
           messageDiv.classList.add('text-red-500');
         }
       }
     } catch (error) {
+      console.error('Form submission error:', error);
       // Show error message
       if (messageDiv) {
         messageDiv.textContent = 'Une erreur est survenue. Veuillez réessayer.';
