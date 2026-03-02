@@ -47,7 +47,7 @@ const socialLinks = [
           {locale === 'fr' ? 'Ressources' : 'Resources'}
         </span>
         <a
-          href="/cv/Adrien_Watrelot_CV_FR.pdf"
+          href={locale === 'fr' ? '/cv/Adrien_Watrelot_CV_FR.pdf' : '/cv/Adrien_Watrelot_CV_EN.pdf'}
           download
           class="text-sm text-muted-foreground hover:text-primary transition-colors flex items-center gap-2 group"
         >
